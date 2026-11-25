@@ -7,138 +7,295 @@
 <title>KRUG PRODUCTIONS BACKUP</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#070817;color:white;font-family:Arial,sans-serif}
-header{text-align:center;padding:35px 15px;background:linear-gradient(120deg,#11154b,#6816a9,#092b62);background-size:200%;animation:bg 8s infinite alternate}
-@keyframes bg{to{background-position:100%}}
-h1{font-size:clamp(28px,5vw,48px);margin:5px}
-header p{color:#ddd2ff}
-nav{text-align:center;padding:15px;background:#101126}
-nav a{color:#cbbaff;text-decoration:none;margin:12px}
-.search{display:block;width:85%;max-width:550px;margin:25px auto;padding:16px;border:2px solid #8855ff;border-radius:13px;background:#17172e;color:white;font-size:17px}
-h2{padding-left:22px}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;padding:22px}
-.card{background:linear-gradient(145deg,#22234d,#38145d);border:1px solid #7850ca;border-radius:18px;overflow:hidden;transition:.3s;box-shadow:0 10px 25px #0008}
-.card:hover{transform:perspective(700px) rotateY(-4deg) translateY(-8px);box-shadow:0 15px 35px #6633ff66}
-.art{height:145px;display:grid;place-items:center;font-size:75px;background:radial-gradient(circle,#6140a9,#15152f);animation:float 4s infinite ease-in-out}
-@keyframes float{50%{transform:translateY(-7px)}}
-.info{padding:17px}
-.info p{color:#c7c3e0;min-height:36px}
-button{border:0;border-radius:9px;padding:11px 14px;background:#8050ff;color:white;font-weight:bold;cursor:pointer;margin:3px}
+body{margin:0;background:#080817;color:white;font-family:Arial}
+header{text-align:center;padding:28px;background:linear-gradient(120deg,#15154b,#6919a9,#092b62)}
+h1{font-size:clamp(25px,5vw,44px)}
+header p{color:#ddd}
+nav{text-align:center;padding:15px;background:#14142a}
+nav a{color:#c9b4ff;margin:12px;text-decoration:none}
+.search{display:block;width:85%;max-width:550px;margin:25px auto;padding:15px;border-radius:12px;background:#17172e;border:2px solid #8655ff;color:white;font-size:17px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:22px}
+.card{background:linear-gradient(145deg,#22234d,#38145d);border:1px solid #7850ca;border-radius:18px;padding:20px;text-align:center;transition:.25s}
+.card:hover{transform:translateY(-7px)}
+.art{font-size:65px;padding:15px}
+button{background:#8050ff;color:white;border:0;border-radius:9px;padding:12px 18px;font-weight:bold;cursor:pointer;margin:5px}
 button:hover{background:#a47cff}
-.play{background:#18a879}
-#player{display:none;margin:20px;padding:15px;background:#17172e;border-radius:16px}
-#frame{width:100%;height:65vh;background:#080817;border:0;border-radius:12px}
+#racer{display:none;padding:15px;margin:15px auto;max-width:1000px;background:#15152c;border-radius:16px}
+canvas{display:block;width:100%;height:auto;border-radius:12px;background:#101020}
+.controls{display:flex;justify-content:center;gap:20px;padding:10px}
+.controls button{font-size:24px;min-width:90px}
+.stats{display:flex;justify-content:space-around;flex-wrap:wrap;padding:10px;font-size:18px}
+#message{text-align:center;color:#d9caff;min-height:24px}
 footer{text-align:center;padding:30px;color:#aaa}
 </style>
 </head>
 <body>
+
 <header>
 <h1>🚀 KRUG PRODUCTIONS BACKUP</h1>
 <p>YOUR NEXT LEVEL GAMING DESTINATION</p>
 </header>
+
 <nav>
 <a href="#games">GAMES</a>
-<a href="#featured">FEATURED</a>
-<a href="#about">ABOUT</a>
+<a href="#racer">KRUG RACER</a>
 </nav>
 
 <input class="search" id="search" placeholder="🔎 Search games..." oninput="filterGames()">
 
-<h2 id="featured">⭐ FEATURED GAMES</h2>
-<div class="games" id="library">
+<h2 style="padding-left:22px" id="games">⭐ GAME LIBRARY</h2>
 
-<div class="card" data-name="racing car driving">
+<div class="games">
+<div class="card">
 <div class="art">🏎️</div>
-<div class="info">
-<h3>RACING ZONE</h3>
-<p>Find exciting car racing games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/racing')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/racing')">↗ NEW TAB</button>
-</div></div>
-
-<div class="card" data-name="car destruction crash">
+<h2>KRUG STREET RACER</h2>
+<p>Our very own racing game!</p>
+<button onclick="showRacer()">▶ PLAY NOW</button>
+</div>
+<div class="card">
 <div class="art">💥</div>
-<div class="info">
-<h3>CAR DESTRUCTION</h3>
-<p>Explore vehicle destruction games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/car')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/car')">↗ NEW TAB</button>
-</div></div>
-
-<div class="card" data-name="snow rider snowboarding">
+<h2>DESTRUCTION ZONE</h2>
+<p>More original games coming soon.</p>
+<button onclick="comingSoon()">COMING SOON</button>
+</div>
+<div class="card">
 <div class="art">🏂</div>
-<div class="info">
-<h3>SNOW RIDER</h3>
-<p>Explore snowy slopes and snow games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/snow')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/snow')">↗ NEW TAB</button>
-</div></div>
-
-<div class="card" data-name="sports soccer football">
+<h2>SNOW RUSH</h2>
+<p>More original games coming soon.</p>
+<button onclick="comingSoon()">COMING SOON</button>
+</div>
+<div class="card">
 <div class="art">⚽</div>
-<div class="info">
-<h3>SPORTS ARENA</h3>
-<p>Discover fun sports games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/sports')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/sports')">↗ NEW TAB</button>
-</div></div>
-
-<div class="card" data-name="arcade games">
-<div class="art">🕹️</div>
-<div class="info">
-<h3>ARCADE WORLD</h3>
-<p>Explore arcade games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/arcade')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/arcade')">↗ NEW TAB</button>
-</div></div>
-
-<div class="card" data-name="adventure exploration">
-<div class="art">🌌</div>
-<div class="info">
-<h3>ADVENTURE WORLD</h3>
-<p>Discover adventure games.</p>
-<button class="play" onclick="openGame('https://www.crazygames.com/t/adventure')">▶ PLAY</button>
-<button onclick="newTab('https://www.crazygames.com/t/adventure')">↗ NEW TAB</button>
-</div></div>
-
+<h2>SPORTS ARENA</h2>
+<p>More original games coming soon.</p>
+<button onclick="comingSoon()">COMING SOON</button>
+</div>
 </div>
 
-<div id="player">
-<h2 id="gameTitle">GAME PLAYER</h2>
-<iframe id="frame" allowfullscreen></iframe>
-<br>
+<section id="racer">
+<h2 style="text-align:center">🏎️ KRUG STREET RACER</h2>
+<div class="stats">
+<span>🏆 SCORE: <b id="score">0</b></span>
+<span>⭐ BEST: <b id="best">0</b></span>
+</div>
+
+<canvas id="game" width="900" height="520"></canvas>
+
+<p id="message">Press START to begin your race!</p>
+<center>
+<button onclick="startGame()">▶ START / RESTART</button>
 <button onclick="fullScreen()">⛶ FULLSCREEN</button>
-<button onclick="closeGame()">⬅ BACK</button>
-</div>
-
-<center style="padding:20px">
-<button onclick="document.documentElement.requestFullscreen()">⛶ FULL WEBSITE</button>
 </center>
 
-<div id="about" style="text-align:center;padding:20px">
-<h2>ABOUT KRUG PRODUCTIONS</h2>
-<p>A gaming hub made for fun and entertainment.</p>
+<div class="controls">
+<button id="left">⬅️</button>
+<button id="right">➡️</button>
 </div>
+<p style="text-align:center;color:#bbb">
+Use LEFT and RIGHT arrow keys or the buttons to steer.
+</p>
+</section>
+
 <footer>© 2026 KRUG PRODUCTIONS BACKUP</footer>
 
 <script>
 function filterGames(){
-let q=document.getElementById('search').value.toLowerCase();
-document.querySelectorAll('.card').forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(q)?'':'none';
+ const q=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll(".card").forEach(c=>{
+ c.style.display=c.innerText.toLowerCase().includes(q)?"":"none";
+ });
+}
+function comingSoon(){
+ alert("More KRUG games are coming soon!");
+}
+
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+const W=900,H=520;
+let running=false,score=0,best=0,frame=0;
+let lane=1,obstacles=[],speed=4;
+let animation;
+
+function roadX(y){
+ let t=y/H;
+ return 350-(250*t);
+}
+function roadRight(y){
+ let t=y/H;
+ return 550+(250*t);
+}
+function laneX(n,y){
+ let left=roadX(y),right=roadRight(y);
+ return left+(right-left)*(n+.5)/3;
+}
+function drawRoad(){
+ let g=ctx.createLinearGradient(0,0,0,H);
+ g.addColorStop(0,"#25254b");
+ g.addColorStop(1,"#090914");
+ ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+ ctx.fillStyle="#24452c";
+ ctx.fillRect(0,0,W,H);
+
+ ctx.fillStyle="#292d39";
+ ctx.beginPath();
+ ctx.moveTo(350,0);ctx.lineTo(550,0);
+ ctx.lineTo(800,H);ctx.lineTo(100,H);
+ ctx.closePath();ctx.fill();
+
+ ctx.strokeStyle="#eee";
+ ctx.lineWidth=7;
+ ctx.beginPath();
+ ctx.moveTo(350,0);ctx.lineTo(100,H);
+ ctx.moveTo(550,0);ctx.lineTo(800,H);
+ ctx.stroke();
+
+ for(let i=1;i<3;i++){
+ let x1=350+200*i/3;
+ let x2=100+700*i/3;
+ ctx.strokeStyle="#aaa";
+ ctx.lineWidth=4;
+ ctx.setLineDash([25,25]);
+ ctx.beginPath();
+ ctx.moveTo(x1,0);ctx.lineTo(x2,H);
+ ctx.stroke();
+ }
+ ctx.setLineDash([]);
+}
+
+function drawCar(x,y,color,player=false){
+ ctx.save();
+ ctx.translate(x,y);
+ let s=player?1:0.75;
+ ctx.scale(s,s);
+
+ ctx.fillStyle="#080810";
+ ctx.fillRect(-30,-43,12,35);
+ ctx.fillRect(18,-43,12,35);
+ ctx.fillRect(-30,15,12,35);
+ ctx.fillRect(18,15,12,35);
+
+ ctx.fillStyle=color;
+ ctx.beginPath();
+ ctx.moveTo(-28,38);ctx.lineTo(-23,-28);
+ ctx.lineTo(-13,-43);ctx.lineTo(13,-43);
+ ctx.lineTo(23,-28);ctx.lineTo(28,38);
+ ctx.closePath();ctx.fill();
+
+ ctx.fillStyle="#a9e5ff";
+ ctx.fillRect(-17,-25,34,20);
+ ctx.fillStyle="#ffec8a";
+ ctx.fillRect(-20,27,10,7);
+ ctx.fillRect(10,27,10,7);
+
+ ctx.restore();
+}
+
+function draw(){
+ drawRoad();
+
+ // Horizon glow
+ let glow=ctx.createRadialGradient(450,40,5,450,40,240);
+ glow.addColorStop(0,"#6152b5");
+ glow.addColorStop(1,"transparent");
+ ctx.fillStyle=glow;ctx.fillRect(200,0,500,170);
+
+ // Road stripes moving
+ ctx.strokeStyle="#f6edbd";
+ ctx.lineWidth=5;
+ for(let i=0;i<8;i++){
+  let y=((i*95+frame*speed*2)%650)-100;
+  for(let n=1;n<3;n++){
+   let x=laneX(n,y);
+   ctx.beginPath();
+   ctx.moveTo(x-3,y);
+   ctx.lineTo(x+3,y+30);
+   ctx.stroke();
+  }
+ }
+
+ obstacles.forEach(o=>{
+  drawCar(laneX(o.lane,o.y),o.y,"#e43f5f");
+ });
+
+ drawCar(laneX(lane,450),450,"#36aaff",true);
+
+ // Dashboard
+ ctx.fillStyle="#fff";
+ ctx.font="bold 19px Arial";
+ ctx.fillText("KRUG RACING",25,35);
+}
+
+function startGame(){
+ cancelAnimationFrame(animation);
+ score=0;frame=0;lane=1;speed=4;
+ obstacles=[];running=true;
+ document.getElementById("score").textContent=0;
+ document.getElementById("message").textContent="GO GO GO!";
+ loop();
+}
+
+function loop(){
+ if(!running)return;
+ frame++;
+ speed=4+Math.min(score/500,4);
+
+ if(frame%65===0){
+  obstacles.push({lane:Math.floor(Math.random()*3),y:-60});
+ }
+ obstacles.forEach(o=>o.y+=speed*2);
+ obstacles=obstacles.filter(o=>o.y<570);
+
+ score++;
+ document.getElementById("score").textContent=score;
+ if(score>best){
+  best=score;
+  document.getElementById("best").textContent=best;
+ }
+
+ for(let o of obstacles){
+  if(o.lane===lane && o.y>385 && o.y<490){
+   running=false;
+   document.getElementById("message").textContent="💥 CRASH! Press START to race again.";
+   draw();
+   return;
+  }
+ }
+ draw();
+ animation=requestAnimationFrame(loop);
+}
+
+function moveLeft(){
+ if(running)lane=Math.max(0,lane-1);
+}
+function moveRight(){
+ if(running)lane=Math.min(2,lane+1);
+}
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"){e.preventDefault();moveLeft();}
+ if(e.key==="ArrowRight"){e.preventDefault();moveRight();}
 });
+
+function holdButton(id,fn){
+ const b=document.getElementById(id);
+ b.addEventListener("pointerdown",e=>{e.preventDefault();fn();});
 }
-function openGame(url){
-document.getElementById('frame').src=url;
-document.getElementById('player').style.display='block';
-document.getElementById('player').scrollIntoView({behavior:'smooth'});
+holdButton("left",moveLeft);
+holdButton("right",moveRight);
+
+function showRacer(){
+ const r=document.getElementById("racer");
+ r.style.display="block";
+ r.scrollIntoView({behavior:"smooth"});
+ draw();
 }
-function newTab(url){window.open(url,'_blank','noopener');}
-function fullScreen(){document.getElementById('frame').requestFullscreen();}
-function closeGame(){
-document.getElementById('frame').src='';
-document.getElementById('player').style.display='none';
+function fullScreen(){
+ const r=document.getElementById("racer");
+ if(r.requestFullscreen)r.requestFullscreen();
 }
+
+draw();
 </script>
 </body>
 </html>
