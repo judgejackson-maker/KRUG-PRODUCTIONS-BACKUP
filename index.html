@@ -7,25 +7,28 @@
 <title>KRUG PRODUCTIONS BACKUP</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080817;color:white;font-family:Arial}
-header{text-align:center;padding:28px;background:linear-gradient(120deg,#15154b,#6919a9,#092b62)}
-h1{font-size:clamp(25px,5vw,44px)}
-header p{color:#ddd}
-nav{text-align:center;padding:15px;background:#14142a}
-nav a{color:#c9b4ff;margin:12px;text-decoration:none}
-.search{display:block;width:85%;max-width:550px;margin:25px auto;padding:15px;border-radius:12px;background:#17172e;border:2px solid #8655ff;color:white;font-size:17px}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:22px}
-.card{background:linear-gradient(145deg,#22234d,#38145d);border:1px solid #7850ca;border-radius:18px;padding:20px;text-align:center;transition:.25s}
-.card:hover{transform:translateY(-7px)}
-.art{font-size:65px;padding:15px}
-button{background:#8050ff;color:white;border:0;border-radius:9px;padding:12px 18px;font-weight:bold;cursor:pointer;margin:5px}
-button:hover{background:#a47cff}
-#racer{display:none;padding:15px;margin:15px auto;max-width:1000px;background:#15152c;border-radius:16px}
-canvas{display:block;width:100%;height:auto;border-radius:12px;background:#101020}
-.controls{display:flex;justify-content:center;gap:20px;padding:10px}
-.controls button{font-size:24px;min-width:90px}
-.stats{display:flex;justify-content:space-around;flex-wrap:wrap;padding:10px;font-size:18px}
-#message{text-align:center;color:#d9caff;min-height:24px}
+body{margin:0;background:#080b19;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:30px;background:linear-gradient(120deg,#101a50,#6422a8,#092d64)}
+header h1{font-size:clamp(26px,5vw,45px)}
+nav{text-align:center;padding:16px;background:#11162d}
+nav a{color:#cdbaff;text-decoration:none;margin:12px}
+.search{display:block;width:85%;max-width:550px;margin:25px auto;padding:15px;border-radius:12px;background:#171b34;border:2px solid #8755ff;color:white;font-size:17px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;padding:22px}
+.card{background:linear-gradient(145deg,#202c50,#371653);border:1px solid #8059c9;border-radius:18px;overflow:hidden;transition:.25s}
+.card:hover{transform:translateY(-8px) scale(1.02)}
+.art{height:155px;display:grid;place-items:center;font-size:85px;background:radial-gradient(circle,#627caa,#17203e);text-shadow:0 8px 15px #000}
+.info{padding:18px}
+.info p{color:#c9d0e5}
+button{background:#8050ff;color:white;border:0;border-radius:9px;padding:12px 18px;margin:4px;font-weight:bold;cursor:pointer}
+button:hover{background:#a477ff}
+.play{background:#159b78}
+#player{display:none;max-width:1100px;margin:20px auto;padding:14px;background:#11182d;border-radius:18px}
+#gameTitle{text-align:center}
+canvas{width:100%;height:auto;display:block;border-radius:12px;background:#101a30}
+.stats{display:flex;justify-content:space-around;flex-wrap:wrap;padding:12px;font-size:19px}
+.controls{display:flex;justify-content:center;gap:25px;padding:12px}
+.controls button{font-size:25px;min-width:90px}
+#message{text-align:center;color:#d8e5ff;min-height:25px}
 footer{text-align:center;padding:30px;color:#aaa}
 </style>
 </head>
@@ -38,264 +41,360 @@ footer{text-align:center;padding:30px;color:#aaa}
 
 <nav>
 <a href="#games">GAMES</a>
-<a href="#racer">KRUG RACER</a>
+<a href="#player">GAME PLAYER</a>
 </nav>
 
 <input class="search" id="search" placeholder="🔎 Search games..." oninput="filterGames()">
 
-<h2 style="padding-left:22px" id="games">⭐ GAME LIBRARY</h2>
+<h2 style="padding-left:22px" id="games">⭐ 3D GAME LIBRARY</h2>
 
 <div class="games">
 <div class="card">
 <div class="art">🏎️</div>
+<div class="info">
 <h2>KRUG STREET RACER</h2>
-<p>Our very own racing game!</p>
-<button onclick="showRacer()">▶ PLAY NOW</button>
-</div>
-<div class="card">
-<div class="art">💥</div>
-<h2>DESTRUCTION ZONE</h2>
-<p>More original games coming soon.</p>
-<button onclick="comingSoon()">COMING SOON</button>
-</div>
-<div class="card">
-<div class="art">🏂</div>
-<h2>SNOW RUSH</h2>
-<p>More original games coming soon.</p>
-<button onclick="comingSoon()">COMING SOON</button>
-</div>
-<div class="card">
-<div class="art">⚽</div>
-<h2>SPORTS ARENA</h2>
-<p>More original games coming soon.</p>
-<button onclick="comingSoon()">COMING SOON</button>
+<p>Race through a realistic-looking 3D road environment.</p>
+<button class="play" onclick="startGame('race')">▶ PLAY</button>
 </div>
 </div>
 
-<section id="racer">
-<h2 style="text-align:center">🏎️ KRUG STREET RACER</h2>
+<div class="card">
+<div class="art">🏂</div>
+<div class="info">
+<h2>KRUG SNOW RIDER</h2>
+<p>Ride down a snowy mountain and dodge obstacles.</p>
+<button class="play" onclick="startGame('snow')">▶ PLAY</button>
+</div>
+</div>
+</div>
+
+<section id="player">
+<h2 id="gameTitle">KRUG GAME</h2>
 <div class="stats">
 <span>🏆 SCORE: <b id="score">0</b></span>
 <span>⭐ BEST: <b id="best">0</b></span>
 </div>
-
 <canvas id="game" width="900" height="520"></canvas>
-
-<p id="message">Press START to begin your race!</p>
+<p id="message">Press START to play!</p>
 <center>
-<button onclick="startGame()">▶ START / RESTART</button>
+<button onclick="restart()">▶ START / RESTART</button>
 <button onclick="fullScreen()">⛶ FULLSCREEN</button>
+<button onclick="stopGame()">⬅ BACK</button>
 </center>
-
 <div class="controls">
 <button id="left">⬅️</button>
 <button id="right">➡️</button>
 </div>
-<p style="text-align:center;color:#bbb">
-Use LEFT and RIGHT arrow keys or the buttons to steer.
-</p>
+<center><small>Use arrow keys or the buttons to steer. Press SPACE to jump in Snow Rider.</small></center>
 </section>
 
 <footer>© 2026 KRUG PRODUCTIONS BACKUP</footer>
 
 <script>
-function filterGames(){
- const q=document.getElementById("search").value.toLowerCase();
- document.querySelectorAll(".card").forEach(c=>{
- c.style.display=c.innerText.toLowerCase().includes(q)?"":"none";
- });
-}
-function comingSoon(){
- alert("More KRUG games are coming soon!");
-}
-
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 const W=900,H=520;
-let running=false,score=0,best=0,frame=0;
-let lane=1,obstacles=[],speed=4;
-let animation;
 
-function roadX(y){
- let t=y/H;
- return 350-(250*t);
-}
-function roadRight(y){
- let t=y/H;
- return 550+(250*t);
-}
-function laneX(n,y){
- let left=roadX(y),right=roadRight(y);
- return left+(right-left)*(n+.5)/3;
-}
-function drawRoad(){
- let g=ctx.createLinearGradient(0,0,0,H);
- g.addColorStop(0,"#25254b");
- g.addColorStop(1,"#090914");
- ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+let mode="race",running=false,score=0,best={race:0,snow:0};
+let player=0,objects=[],frame=0,speed=5,jumping=0;
+let anim=null;
 
- ctx.fillStyle="#24452c";
- ctx.fillRect(0,0,W,H);
-
- ctx.fillStyle="#292d39";
- ctx.beginPath();
- ctx.moveTo(350,0);ctx.lineTo(550,0);
- ctx.lineTo(800,H);ctx.lineTo(100,H);
- ctx.closePath();ctx.fill();
-
- ctx.strokeStyle="#eee";
- ctx.lineWidth=7;
- ctx.beginPath();
- ctx.moveTo(350,0);ctx.lineTo(100,H);
- ctx.moveTo(550,0);ctx.lineTo(800,H);
- ctx.stroke();
-
- for(let i=1;i<3;i++){
- let x1=350+200*i/3;
- let x2=100+700*i/3;
- ctx.strokeStyle="#aaa";
- ctx.lineWidth=4;
- ctx.setLineDash([25,25]);
- ctx.beginPath();
- ctx.moveTo(x1,0);ctx.lineTo(x2,H);
- ctx.stroke();
- }
- ctx.setLineDash([]);
+function filterGames(){
+ let q=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll(".card").forEach(c=>{
+  c.style.display=c.innerText.toLowerCase().includes(q)?"":"none";
+ });
 }
 
-function drawCar(x,y,color,player=false){
- ctx.save();
- ctx.translate(x,y);
- let s=player?1:0.75;
- ctx.scale(s,s);
+function startGame(type){
+ mode=type;
+ document.getElementById("player").style.display="block";
+ document.getElementById("gameTitle").textContent=
+ mode==="race"?"🏎️ KRUG STREET RACER":"🏂 KRUG SNOW RIDER";
+ document.getElementById("player").scrollIntoView({behavior:"smooth"});
+ restart();
+}
 
- ctx.fillStyle="#080810";
- ctx.fillRect(-30,-43,12,35);
- ctx.fillRect(18,-43,12,35);
- ctx.fillRect(-30,15,12,35);
- ctx.fillRect(18,15,12,35);
+function restart(){
+ cancelAnimationFrame(anim);
+ score=0;frame=0;player=0;objects=[];speed=5;jumping=0;
+ running=true;
+ document.getElementById("score").textContent="0";
+ document.getElementById("message").textContent="GO! GO! GO!";
+ loop();
+}
 
+function stopGame(){
+ running=false;
+ cancelAnimationFrame(anim);
+ document.getElementById("player").style.display="none";
+}
+
+function fullScreen(){
+ canvas.requestFullscreen?.();
+}
+
+function left(){if(running)player=Math.max(-1,player-.22)}
+function right(){if(running)player=Math.min(1,player+.22)}
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"){e.preventDefault();left()}
+ if(e.key==="ArrowRight"){e.preventDefault();right()}
+ if(e.code==="Space"&&mode==="snow"&&running&&jumping===0)jumping=35;
+});
+document.getElementById("left").addEventListener("pointerdown",e=>{e.preventDefault();left()});
+document.getElementById("right").addEventListener("pointerdown",e=>{e.preventDefault();right()});
+
+function poly(points,color){
  ctx.fillStyle=color;
  ctx.beginPath();
- ctx.moveTo(-28,38);ctx.lineTo(-23,-28);
- ctx.lineTo(-13,-43);ctx.lineTo(13,-43);
- ctx.lineTo(23,-28);ctx.lineTo(28,38);
+ ctx.moveTo(points[0][0],points[0][1]);
+ for(let p of points.slice(1))ctx.lineTo(p[0],p[1]);
  ctx.closePath();ctx.fill();
+}
 
- ctx.fillStyle="#a9e5ff";
- ctx.fillRect(-17,-25,34,20);
- ctx.fillStyle="#ffec8a";
- ctx.fillRect(-20,27,10,7);
- ctx.fillRect(10,27,10,7);
+function perspective(z){
+ return 1-z;
+}
+function center(z){
+ return 450+player*95*z;
+}
+function scale(z){
+ return .18+z*1.15;
+}
 
+function car(x,y,s,color){
+ ctx.save();
+ ctx.translate(x,y);
+ ctx.scale(s,s);
+ // Wheels
+ ctx.fillStyle="#101116";
+ ctx.fillRect(-35,-5,13,42);
+ ctx.fillRect(22,-5,13,42);
+ ctx.fillRect(-35,-53,13,35);
+ ctx.fillRect(22,-53,13,35);
+ // Body
+ let g=ctx.createLinearGradient(-30,0,30,0);
+ g.addColorStop(0,"#7a1025");
+ g.addColorStop(.5,color);
+ g.addColorStop(1,"#570d21");
+ ctx.fillStyle=g;
+ ctx.beginPath();
+ ctx.moveTo(-29,45);ctx.lineTo(-25,-43);
+ ctx.lineTo(-13,-65);ctx.lineTo(13,-65);
+ ctx.lineTo(25,-43);ctx.lineTo(29,45);
+ ctx.closePath();ctx.fill();
+ // Glass
+ ctx.fillStyle="#a7e3f7";
+ ctx.beginPath();
+ ctx.moveTo(-17,-25);ctx.lineTo(-12,-51);
+ ctx.lineTo(12,-51);ctx.lineTo(17,-25);
+ ctx.closePath();ctx.fill();
+ ctx.fillStyle="#fff3b2";
+ ctx.fillRect(-22,30,12,7);
+ ctx.fillRect(10,30,12,7);
  ctx.restore();
 }
 
-function draw(){
- drawRoad();
-
- // Horizon glow
- let glow=ctx.createRadialGradient(450,40,5,450,40,240);
- glow.addColorStop(0,"#6152b5");
- glow.addColorStop(1,"transparent");
- ctx.fillStyle=glow;ctx.fillRect(200,0,500,170);
-
- // Road stripes moving
- ctx.strokeStyle="#f6edbd";
- ctx.lineWidth=5;
- for(let i=0;i<8;i++){
-  let y=((i*95+frame*speed*2)%650)-100;
-  for(let n=1;n<3;n++){
-   let x=laneX(n,y);
-   ctx.beginPath();
-   ctx.moveTo(x-3,y);
-   ctx.lineTo(x+3,y+30);
-   ctx.stroke();
-  }
- }
-
- obstacles.forEach(o=>{
-  drawCar(laneX(o.lane,o.y),o.y,"#e43f5f");
- });
-
- drawCar(laneX(lane,450),450,"#36aaff",true);
-
- // Dashboard
- ctx.fillStyle="#fff";
- ctx.font="bold 19px Arial";
- ctx.fillText("KRUG RACING",25,35);
+function tree(x,y,s){
+ ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+ ctx.fillStyle="#49321f";ctx.fillRect(-5,0,10,35);
+ poly([[-28,10],[0,-75],[28,10]],"#145139");
+ poly([[-22,-15],[0,-100],[22,-15]],"#1d7651");
+ ctx.restore();
 }
 
-function startGame(){
- cancelAnimationFrame(animation);
- score=0;frame=0;lane=1;speed=4;
- obstacles=[];running=true;
- document.getElementById("score").textContent=0;
- document.getElementById("message").textContent="GO GO GO!";
- loop();
+function rock(x,y,s){
+ ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+ poly([[-22,12],[-16,-10],[0,-22],[20,-8],[27,12]],"#687785");
+ ctx.restore();
+}
+
+function snowboarder(x,y,s){
+ ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+ // Shadow and snowboard
+ ctx.fillStyle="#a4d5e8";
+ ctx.beginPath();ctx.ellipse(0,42,42,9,-.12,0,Math.PI*2);ctx.fill();
+ ctx.save();ctx.rotate(-.12);
+ let g=ctx.createLinearGradient(0,25,0,45);
+ g.addColorStop(0,"#f8bd35");g.addColorStop(1,"#bb4a13");
+ ctx.fillStyle=g;ctx.fillRect(-43,25,86,10);
+ ctx.restore();
+ // Body
+ ctx.strokeStyle="#171d2c";ctx.lineWidth=9;ctx.lineCap="round";
+ ctx.beginPath();ctx.moveTo(-5,5);ctx.lineTo(-20,28);
+ ctx.moveTo(4,5);ctx.lineTo(20,27);
+ ctx.stroke();
+ // Jacket
+ ctx.fillStyle="#e54b32";
+ ctx.beginPath();ctx.ellipse(0,-8,18,27,.15,0,Math.PI*2);ctx.fill();
+ // Arms
+ ctx.strokeStyle="#e5a27b";ctx.lineWidth=8;
+ ctx.beginPath();ctx.moveTo(-12,-15);ctx.lineTo(-36,-2);
+ ctx.moveTo(12,-15);ctx.lineTo(35,-3);ctx.stroke();
+ // Helmet
+ ctx.fillStyle="#182c54";
+ ctx.beginPath();ctx.arc(0,-39,17,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#a8e9ff";ctx.fillRect(5,-43,12,8);
+ ctx.restore();
+}
+
+function drawRace(){
+ let sky=ctx.createLinearGradient(0,0,0,260);
+ sky.addColorStop(0,"#182d50");sky.addColorStop(1,"#8da9c3");
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+ poly([[0,170],[240,105],[340,190],[0,300]],"#283c42");
+ poly([[900,170],[650,110],[550,190],[900,300]],"#263d43");
+
+ ctx.fillStyle="#35604a";ctx.fillRect(0,190,W,330);
+
+ poly([[350,110],[550,110],[840,520],[60,520]],"#353b46");
+ poly([[350,110],[550,110],[840,520],[60,520]],"#353b46");
+
+ // Road borders
+ ctx.strokeStyle="#e9e7df";ctx.lineWidth=9;
+ ctx.beginPath();ctx.moveTo(350,110);ctx.lineTo(60,520);
+ ctx.moveTo(550,110);ctx.lineTo(840,520);ctx.stroke();
+
+ // Road markings
+ for(let i=0;i<9;i++){
+ let z=((i*0.14+frame*.009)%1);
+ let y=110+410*z*z;
+ let width=3+z*6;
+ ctx.fillStyle="#f4f0cf";
+ for(let n=-1;n<=1;n+=2){
+  ctx.fillRect(450+n*(20+z*160),y,width,12+z*35);
+ }
+ }
+
+ // Trees
+ for(let i=0;i<9;i++){
+ let z=((i*.13+frame*.007)%1);
+ let y=125+z*z*380;
+ let s=.2+z*.85;
+ tree(450-250*s,y,s);
+ tree(450+250*s,y,s);
+ }
+
+ // Traffic
+ objects.forEach(o=>{
+ let z=o.z;
+ let y=110+z*z*400;
+ let x=450+o.lane*110*z;
+ car(x,y,scale(z)*.7,"#d94b36");
+ });
+
+ car(450+player*150,440,1.05,"#278de7");
+}
+
+function drawSnow(){
+ let sky=ctx.createLinearGradient(0,0,0,H);
+ sky.addColorStop(0,"#4384b5");
+ sky.addColorStop(.55,"#c6e7f8");
+ sky.addColorStop(1,"#f1faff");
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+ // Distant mountains
+ poly([[0,210],[110,75],[210,185],[350,45],[480,200],[630,65],[790,190],[900,100],[900,350],[0,350]],"#e6f5ff");
+ poly([[0,240],[190,130],[320,240],[500,120],[680,240],[820,130],[900,220],[900,400],[0,400]],"#9bc5df");
+
+ // Snow slope
+ poly([[350,130],[550,130],[900,520],[0,520]],"#e8f6ff");
+ poly([[350,130],[550,130],[900,520],[0,520]],"#d5e9f4");
+
+ // Shadows and track lines
+ for(let i=0;i<12;i++){
+ let z=((i*.1+frame*.007)%1);
+ let y=130+z*z*390;
+ let width=8+z*25;
+ ctx.strokeStyle=i%2?"#c6deed":"#f8ffff";
+ ctx.lineWidth=width;
+ ctx.beginPath();
+ ctx.moveTo(450-250*z,y);
+ ctx.lineTo(450+250*z,y+10);
+ ctx.stroke();
+ }
+
+ // Snowy trees and rocks
+ objects.forEach(o=>{
+ let z=o.z;
+ let y=130+z*z*390;
+ let x=450+o.lane*220*z;
+ if(o.type==="tree"){
+  tree(x,y,scale(z)*.8);
+  // Snow on tree
+  ctx.fillStyle="white";
+  ctx.beginPath();ctx.arc(x-4*scale(z),y-45*scale(z),10*scale(z),0,Math.PI*2);ctx.fill();
+ }else{
+  rock(x,y,scale(z)*1.1);
+ }
+ });
+
+ // Snowboarder
+ snowboarder(450+player*180,410-jumping*2,1.05);
+
+ // Snow particles
+ for(let i=0;i<30;i++){
+ let x=(i*83+frame*2)%W;
+ let y=(i*47+frame*3)%H;
+ ctx.fillStyle="rgba(255,255,255,.8)";
+ ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fill();
+ }
 }
 
 function loop(){
  if(!running)return;
  frame++;
- speed=4+Math.min(score/500,4);
+ score++;
+ speed=5+Math.min(score/350,7);
+ document.getElementById("score").textContent=score;
+
+ if(score>best[mode]){
+ best[mode]=score;
+ document.getElementById("best").textContent=score;
+ }
 
  if(frame%65===0){
-  obstacles.push({lane:Math.floor(Math.random()*3),y:-60});
- }
- obstacles.forEach(o=>o.y+=speed*2);
- obstacles=obstacles.filter(o=>o.y<570);
-
- score++;
- document.getElementById("score").textContent=score;
- if(score>best){
-  best=score;
-  document.getElementById("best").textContent=best;
+ objects.push({
+  lane:(Math.floor(Math.random()*3)-1),
+  z:0,
+  type:mode==="snow"?(Math.random()>.5?"tree":"rock"):"car"
+ });
  }
 
- for(let o of obstacles){
-  if(o.lane===lane && o.y>385 && o.y<490){
+ objects.forEach(o=>o.z+=.012*speed/5);
+ objects=objects.filter(o=>o.z<1.1);
+
+ // Collision check
+ for(let o of objects){
+  if(o.z>.84 && o.z<1.02 &&
+    Math.abs(o.lane-player*.8)<.24 &&
+    !(mode==="snow"&&jumping>12)){
    running=false;
-   document.getElementById("message").textContent="💥 CRASH! Press START to race again.";
-   draw();
-   return;
+   document.getElementById("message").textContent=
+    "💥 GAME OVER! Score: "+score+" — Press restart to try again!";
   }
  }
- draw();
- animation=requestAnimationFrame(loop);
+
+ if(jumping>0)jumping--;
+
+ ctx.clearRect(0,0,W,H);
+ if(mode==="race")drawRace();else drawSnow();
+
+ if(running)anim=requestAnimationFrame(loop);
 }
 
-function moveLeft(){
- if(running)lane=Math.max(0,lane-1);
+function restart(){
+ cancelAnimationFrame(anim);
+ score=0;frame=0;player=0;objects=[];speed=5;jumping=0;
+ running=true;
+ document.getElementById("score").textContent="0";
+ document.getElementById("best").textContent=best[mode];
+ document.getElementById("message").textContent=
+ "GO! Use arrow keys to dodge obstacles!";
+ loop();
 }
-function moveRight(){
- if(running)lane=Math.min(2,lane+1);
-}
-
-document.addEventListener("keydown",e=>{
- if(e.key==="ArrowLeft"){e.preventDefault();moveLeft();}
- if(e.key==="ArrowRight"){e.preventDefault();moveRight();}
-});
-
-function holdButton(id,fn){
- const b=document.getElementById(id);
- b.addEventListener("pointerdown",e=>{e.preventDefault();fn();});
-}
-holdButton("left",moveLeft);
-holdButton("right",moveRight);
-
-function showRacer(){
- const r=document.getElementById("racer");
- r.style.display="block";
- r.scrollIntoView({behavior:"smooth"});
- draw();
-}
-function fullScreen(){
- const r=document.getElementById("racer");
- if(r.requestFullscreen)r.requestFullscreen();
-}
-
-draw();
 </script>
 </body>
 </html>
