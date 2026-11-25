@@ -4,379 +4,520 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KRUG PRODUCTIONS BACKUP</title>
+<title>KRUG PRODUCTIONS BACKUP 6.0</title>
 <style>
-:root{--bg:#080d18;--panel:#111b2d;--panel2:#17243a;--blue:#25c8ff;--purple:#9b6cff;--text:#f4f7ff;--muted:#91a2bb}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at top,#172a48 0%,#080d18 60%);color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
-header{padding:25px 5%;background:#080d18dd;border-bottom:1px solid #263957;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
-.brand{font-size:clamp(25px,4vw,42px);font-weight:1000;letter-spacing:2px;background:linear-gradient(90deg,#fff,#25c8ff,#a77aff);background-clip:text;color:transparent}
-.sub{color:var(--muted);font-size:12px;letter-spacing:4px;margin-top:5px}
-main{max-width:1450px;margin:auto;padding:25px 4%}
-.hero{padding:35px 25px;border:1px solid #2a4265;border-radius:22px;background:linear-gradient(120deg,#132c4d,#17203a 55%,#251b43);box-shadow:0 15px 50px #0005;margin-bottom:25px;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:250px;height:250px;border-radius:50%;right:5%;top:-100px;background:#25c8ff22;filter:blur(10px)}
-.hero h1{font-size:clamp(28px,5vw,48px);margin:0 0 10px;position:relative;z-index:1}
-.hero p{color:#b6c8e1;max-width:650px;line-height:1.6;position:relative;z-index:1}
-.version{display:inline-block;color:#07121e;background:#25c8ff;padding:7px 12px;border-radius:20px;font-size:11px;font-weight:bold;margin-bottom:14px}
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
-input,select{background:#111c30;border:1px solid #304866;color:white;padding:13px 15px;border-radius:11px;font-size:14px;outline:none}
-input{flex:1;min-width:190px}
-button{border:0;border-radius:10px;padding:11px 15px;background:linear-gradient(100deg,#167fc2,#7652d9);color:white;font-weight:bold;cursor:pointer;transition:.2s}
-button:hover{filter:brightness(1.2);transform:translateY(-1px)}
-button.secondary{background:#243650;border:1px solid #3b5274}
-.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 14px}
-.sectionhead h2{font-size:20px;margin:0}
-#count{color:var(--muted);font-size:13px}
+body{margin:0;background:#080e1a;color:#f5f8ff;font-family:Arial,sans-serif}
+header{padding:22px 5%;background:#09111f;border-bottom:1px solid #263b59}
+.brand{font-size:clamp(25px,4vw,40px);font-weight:1000;letter-spacing:2px;background:linear-gradient(90deg,#fff,#32caff,#a67aff);background-clip:text;color:transparent}
+.sub{font-size:11px;letter-spacing:4px;color:#8da3c0;margin-top:5px}
+main{max-width:1400px;margin:auto;padding:24px 4%}
+.hero{padding:35px 25px;border-radius:20px;background:linear-gradient(120deg,#153958,#172342,#292047);border:1px solid #315071;margin-bottom:22px}
+.hero h1{font-size:clamp(28px,5vw,46px);margin:10px 0}
+.hero p{color:#bfd0e4;line-height:1.6;max-width:700px}
+.tag{display:inline-block;background:#26c7ff;color:#061321;border-radius:20px;padding:7px 12px;font-size:11px;font-weight:bold}
+button,input{font:inherit}
+button{border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(100deg,#1688c8,#7555d7);color:white;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(1.17)}
+.secondary{background:#233651;border:1px solid #3c5575}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+input{background:#111e32;color:white;border:1px solid #344d6e;border-radius:9px;padding:12px;min-width:180px;flex:1}
+h2{font-size:21px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px}
-.gamecard{background:linear-gradient(145deg,#17243a,#0e1728);border:1px solid #263b59;border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;position:relative}
-.gamecard:hover{transform:translateY(-5px);border-color:#25c8ff;box-shadow:0 10px 28px #0006}
-.cover{height:125px;display:flex;align-items:center;justify-content:center;font-size:55px;position:relative;overflow:hidden;background:linear-gradient(135deg,#163d60,#201d48)}
-.cover:before{content:"";position:absolute;width:160px;height:160px;border:1px solid #ffffff22;border-radius:50%;transform:translate(50px,30px)}
-.cover span{filter:drop-shadow(0 8px 8px #0008);z-index:1}
-.cardinfo{padding:14px}
-.cardinfo h3{font-size:15px;margin:0 0 7px}
-.cardinfo p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
-.cardbottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
-.tag{font-size:10px;color:#8edfff;background:#16364e;padding:5px 8px;border-radius:20px}
-.fav{background:transparent;padding:4px 7px;font-size:19px;color:#a9b8cc}
-.fav.active{color:#ffd45c}
+.card{background:linear-gradient(145deg,#17253b,#0e1728);border:1px solid #2a405e;border-radius:15px;overflow:hidden;cursor:pointer}
+.card:hover{border-color:#26c7ff;transform:translateY(-3px)}
+.cover{height:125px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,#17456a,#252049)}
+.info{padding:13px}
+.info h3{margin:0 0 7px;font-size:16px}
+.info p{margin:0;color:#9fb0c7;font-size:12px;line-height:1.5}
 #gameScreen{display:none}
-.gameTop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-.gameTop h2{margin:0;font-size:22px}
-.stats{display:flex;gap:10px;flex-wrap:wrap}
-.stat{background:#17243a;border:1px solid #30435e;padding:9px 13px;border-radius:9px;font-size:12px;color:#c5d4e9}
-.stat b{color:#fff}
-.stage{background:#050a12;border:1px solid #314766;border-radius:17px;overflow:hidden;position:relative;box-shadow:0 15px 50px #0008}
-canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;touch-action:none}
+.gamebar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:#17253b;border:1px solid #334b6a;padding:9px 12px;border-radius:9px;font-size:12px}
+.stat b{color:#55d9ff}
+.stage{position:relative;background:#050a12;border:1px solid #304969;border-radius:14px;overflow:hidden;margin-top:14px}
+#gameCanvas{display:block;width:100%;height:auto;touch-action:none}
 .overlay{position:absolute;inset:0;background:#07101ddd;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
-.overlaybox{max-width:440px}
-.overlay h2{font-size:34px;margin:0 0 10px}
-.overlay p{color:#bdcce0;line-height:1.5}
-.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:14px 0;color:#9db0c9;font-size:12px}
-.mobilecontrols{display:none;justify-content:center;gap:12px;margin:12px}
-.mobilecontrols button{min-width:55px;font-size:20px}
-footer{text-align:center;color:#657994;padding:35px 10px;font-size:12px}
-@media(max-width:650px){header{padding:17px 5%}.hero{padding:25px 18px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cover{height:95px;font-size:42px}.cardinfo{padding:10px}.cardinfo h3{font-size:13px}.cardinfo p{font-size:11px}.mobilecontrols{display:flex}}
+.overlaybox{max-width:450px}
+.overlaybox h2{font-size:34px;margin:0 0 10px}
+.overlaybox p{line-height:1.6;color:#c1d0e3}
+.controls{color:#9cb1ca;font-size:12px;text-align:center;margin:12px}
+#roomPanel{background:#111e32;border:1px solid #334b6a;border-radius:12px;padding:15px;margin:15px 0}
+#roomPanel input{max-width:260px}
+#roomStatus{font-size:12px;color:#9fb4ce;margin-top:9px}
+.mobile{display:none;justify-content:center;gap:9px;margin:12px}
+.mobile button{min-width:55px;font-size:20px}
+footer{text-align:center;color:#7185a0;padding:30px;font-size:12px}
+@media(max-width:650px){.mobile{display:flex}.cover{height:95px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.info{padding:10px}.info h3{font-size:13px}}
 </style>
 </head>
 <body>
 <header>
  <div class="brand">KRUG PRODUCTIONS</div>
- <div class="sub">BACKUP GAMING NETWORK</div>
+ <div class="sub">BACKUP GAMING NETWORK • VERSION 6.0</div>
 </header>
 <main>
- <section id="home">
-  <div class="hero">
-   <span class="version">VERSION 5.0 • 20 ORIGINAL GAMES</span>
-   <h1>WELCOME TO KRUG BACKUP.</h1>
-   <p>Race, explore, compete, and survive. Choose a game and jump straight into the action. Built for the KRUG gaming community.</p>
-   <button onclick="randomGame()">🎮 RANDOM GAME</button>
-  </div>
-  <div class="tools">
-   <input id="search" placeholder="🔎 Search games..." oninput="renderGames()">
-   <select id="category" onchange="renderGames()">
-    <option value="All">All Categories</option>
-    <option>Racing</option><option>Sports</option><option>Adventure</option>
-    <option>Action</option><option>Simulation</option>
-   </select>
-   <button class="secondary" onclick="showFavorites()">⭐ Favorites</button>
-   <button class="secondary" onclick="showAll()">Show All</button>
-  </div>
-  <div class="sectionhead"><h2>🔥 GAME LIBRARY</h2><span id="count"></span></div>
-  <div class="grid" id="games"></div>
- </section>
+<section id="home">
+ <div class="hero">
+  <span class="tag">VERSION 6.0 • 3D GAME EDITION</span>
+  <h1>WELCOME TO KRUG BACKUP.</h1>
+  <p>Explore 3D worlds, race through different environments, and challenge your friends. Snow Rider X is the featured game.</p>
+  <button onclick="openGame('snow')">🏂 PLAY SNOW RIDER X</button>
+ </div>
+ <div class="tools">
+  <input id="search" placeholder="🔎 Search games..." oninput="renderGames()">
+  <button class="secondary" onclick="renderGames()">Show all games</button>
+ </div>
+ <h2>🔥 GAME LIBRARY</h2>
+ <div class="grid" id="games"></div>
+</section>
 
- <section id="gameScreen">
-  <div class="gameTop">
-   <div><h2 id="gameTitle">Game</h2><div style="color:#91a2bb;font-size:12px;margin-top:5px" id="gameDesc"></div></div>
-   <div class="stats">
-    <div class="stat">SCORE: <b id="score">0</b></div>
-    <div class="stat">BEST: <b id="best">0</b></div>
-    <div class="stat">TIME: <b id="time">0</b></div>
+<section id="gameScreen">
+ <div class="gamebar">
+  <div><h2 id="gameTitle">Snow Rider X</h2><div id="gameDescription" style="color:#9fb1c9;font-size:12px"></div></div>
+  <div class="stats">
+   <div class="stat">DISTANCE: <b id="distance">0</b> m</div>
+   <div class="stat">SCORE: <b id="score">0</b></div>
+   <div class="stat">BEST: <b id="best">0</b></div>
+  </div>
+ </div>
+
+ <div class="stage">
+  <canvas id="gameCanvas" width="1100" height="620"></canvas>
+  <div class="overlay" id="overlay">
+   <div class="overlaybox">
+    <h2 id="overlayTitle">SNOW RIDER X</h2>
+    <p id="overlayText">Ride down the mountain, avoid obstacles, collect distance, and try to beat your best score.</p>
+    <button id="overlayButton" onclick="startGame()">▶ START GAME</button>
    </div>
   </div>
-  <div class="stage">
-   <canvas id="game" width="960" height="540"></canvas>
-   <div class="overlay" id="overlay">
-    <div class="overlaybox">
-     <h2 id="overlayTitle">READY?</h2>
-     <p id="overlayText">Get ready to play.</p>
-     <button onclick="startGame()">▶ PLAY GAME</button>
-    </div>
-   </div>
-  </div>
-  <div class="controls" id="controlText">WASD / Arrow Keys to move • Space to jump or action</div>
-  <div class="mobilecontrols">
-   <button class="secondary" onpointerdown="hold('ArrowLeft')" onpointerup="release('ArrowLeft')" onpointerleave="release('ArrowLeft')">◀</button>
-   <button class="secondary" onpointerdown="hold('ArrowUp')" onpointerup="release('ArrowUp')" onpointerleave="release('ArrowUp')">▲</button>
-   <button class="secondary" onpointerdown="hold('ArrowDown')" onpointerup="release('ArrowDown')" onpointerleave="release('ArrowDown')">▼</button>
-   <button class="secondary" onpointerdown="hold('ArrowRight')" onpointerup="release('ArrowRight')" onpointerleave="release('ArrowRight')">▶</button>
-   <button onpointerdown="hold(' ')" onpointerup="release(' ')" onpointerleave="release(' ')">ACTION</button>
-  </div>
+ </div>
+
+ <div class="controls">WASD / Arrow Keys to steer • SPACE to jump • P to pause • Avoid trees and rocks!</div>
+ <div class="mobile">
+  <button class="secondary" onpointerdown="press('ArrowLeft')" onpointerup="release('ArrowLeft')" onpointerleave="release('ArrowLeft')">◀</button>
+  <button class="secondary" onpointerdown="press('ArrowRight')" onpointerup="release('ArrowRight')" onpointerleave="release('ArrowRight')">▶</button>
+  <button onpointerdown="press(' ')" onpointerup="release(' ')" onpointerleave="release(' ')">JUMP</button>
+ </div>
+
+ <div id="roomPanel">
+  <b>🌐 MULTIPLAYER ROOMS</b>
+  <p style="font-size:12px;color:#aebfd5">Create a room and share its room code with a friend. Your friend enters the code to join.</p>
   <div class="tools">
-   <button class="secondary" onclick="pauseGame()">⏸ Pause</button>
-   <button class="secondary" onclick="retryGame()">↻ Retry</button>
-   <button class="secondary" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-   <button onclick="goHome()">⌂ Home</button>
+   <button onclick="createRoom()">Create room</button>
+   <input id="roomCode" placeholder="Enter friend's room code">
+   <button onclick="joinRoom()">Join room</button>
   </div>
- </section>
+  <div id="roomStatus">Not connected to a multiplayer room.</div>
+ </div>
+
+ <div class="tools">
+  <button class="secondary" onclick="pauseGame()">⏸ Pause</button>
+  <button class="secondary" onclick="retryGame()">↻ Retry</button>
+  <button class="secondary" onclick="fullScreen()">⛶ Fullscreen</button>
+  <button onclick="goHome()">⌂ Home</button>
+ </div>
+</section>
 </main>
-<footer>KRUG PRODUCTIONS BACKUP • VERSION 5.0 • ORIGINAL BROWSER GAMES</footer>
+<footer>KRUG PRODUCTIONS BACKUP • 6.0 • Original browser game project</footer>
 
-<script>
+<!-- Three.js 3D engine -->
+<script type="importmap">
+{
+ "imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+ }
+}
+</script>
+<!-- PeerJS connection library for online rooms -->
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+<script type="module">
+import * as THREE from "three";
+
 const games=[
- {name:"Neon Street Racer",cat:"Racing",icon:"🏎️",desc:"Race through a glowing city and dodge traffic.",type:"drive",sky:"#172b49"},
- {name:"Mountain Offroad",cat:"Racing",icon:"🚙",desc:"Take your 4x4 through a rough mountain trail.",type:"offroad",sky:"#354c3d"},
- {name:"Snow Rider X",cat:"Racing",icon:"🏂",desc:"Carve through snowy slopes and avoid obstacles.",type:"snow",sky:"#8dbbd2"},
- {name:"Grand Prix Rush",cat:"Racing",icon:"🏁",desc:"Push your racing car to the limit on the track.",type:"grandprix",sky:"#34424f"},
- {name:"Skate City",cat:"Sports",icon:"🛹",desc:"Ride the skate park and collect points.",type:"skate",sky:"#b7a18a"},
- {name:"Soccer Pro",cat:"Sports",icon:"⚽",desc:"Aim your shots and score goals.",type:"soccer",sky:"#387d50"},
- {name:"Hoop Legends",cat:"Sports",icon:"🏀",desc:"Shoot baskets and build your score.",type:"basket",sky:"#ad7448"},
- {name:"Tennis Tour",cat:"Sports",icon:"🎾",desc:"Return the ball and win the rally.",type:"tennis",sky:"#4b8c60"},
- {name:"Golf Masters",cat:"Sports",icon:"⛳",desc:"Time your swing and land on the green.",type:"golf",sky:"#4b8753"},
- {name:"Bowling Night",cat:"Sports",icon:"🎳",desc:"Line up the shot and knock down the pins.",type:"bowling",sky:"#394b65"},
- {name:"City Parkour",cat:"Adventure",icon:"🏃",desc:"Jump across rooftops and avoid gaps.",type:"parkour",sky:"#55728c"},
- {name:"Jungle Explorer",cat:"Adventure",icon:"🌴",desc:"Explore the jungle and dodge hazards.",type:"jungle",sky:"#31634c"},
- {name:"Deep Sea Explorer",cat:"Adventure",icon:"🤿",desc:"Dive deep and collect glowing treasures.",type:"ocean",sky:"#075071"},
- {name:"Flight Simulator",cat:"Simulation",icon:"✈️",desc:"Fly through rings in the open sky.",type:"flight",sky:"#79b8db"},
- {name:"Fishing Lake",cat:"Simulation",icon:"🎣",desc:"Cast your line and catch fish.",type:"fishing",sky:"#286d91"},
- {name:"Space Pilot",cat:"Action",icon:"🚀",desc:"Pilot your ship through an asteroid field.",type:"space",sky:"#10152e"},
- {name:"Galaxy Defender",cat:"Action",icon:"🛸",desc:"Defend your ship from incoming drones.",type:"shooter",sky:"#151a3b"},
- {name:"Tank Arena",cat:"Action",icon:"🛡️",desc:"Drive your tank around the arena and hit targets.",type:"tank",sky:"#485d48"},
- {name:"Desert Rally",cat:"Racing",icon:"🏜️",desc:"Race across a dusty desert course.",type:"desert",sky:"#b77942"},
- {name:"Meteor Survival",cat:"Action",icon:"☄️",desc:"Stay moving and survive the meteor storm.",type:"survival",sky:"#3b243c"}
+ {id:"snow",name:"Snow Rider X",icon:"🏂",desc:"Downhill snowboarding with trees, rocks, jumps, and snowy mountains."},
+ {id:"city",name:"Neon Street Racer",icon:"🏎️",desc:"Drive a sports car through a glowing city course."},
+ {id:"mountain",name:"Mountain Offroad",icon:"🚙",desc:"Take a 4x4 across a rugged mountain trail."},
+ {id:"desert",name:"Desert Rally",icon:"🏜️",desc:"Race across a wide desert landscape."}
 ];
-const colors=["#163f61","#294e3e","#6b9dbb","#293b4d","#9c7252","#34754b","#a96837","#367c60","#5b9250","#3e5470","#526d8a","#35634b","#075071","#82badb","#286d91","#15152e","#202044","#56684b","#a66a35","#42273f"];
-let favorites=JSON.parse(localStorage.getItem("krugFavs")||"[]");
-let current=null,playing=false,paused=false,raf=0,last=0,score=0,elapsed=0,best=0;
-let s={},keys={},objects=[],particles=[],mouse={x:480,y:270,down:false};
-const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
-const W=960,H=540;
-function renderGames(list=games){
+
+const gameGrid=document.getElementById("games");
+function renderGames(){
  const q=document.getElementById("search").value.toLowerCase();
- const cat=document.getElementById("category").value;
- let filtered=list.filter(g=>(g.name.toLowerCase().includes(q)||g.desc.toLowerCase().includes(q))&&(cat==="All"||g.cat===cat));
- document.getElementById("count").textContent=filtered.length+" GAMES";
- document.getElementById("games").innerHTML=filtered.map(g=>{
-  let i=games.indexOf(g);
-  return `<article class="gamecard" onclick="openGame(${i})"><div class="cover" style="background:linear-gradient(135deg,${g.sky},#171b36)"><span>${g.icon}</span></div><div class="cardinfo"><h3>${g.name}</h3><p>${g.desc}</p><div class="cardbottom"><span class="tag">${g.cat}</span><button class="fav ${favorites.includes(g.name)?"active":""}" onclick="event.stopPropagation();favorite(${i})">${favorites.includes(g.name)?"★":"☆"}</button></div></div></article>`;
- }).join("");
+ gameGrid.innerHTML=games.filter(g=>(g.name+" "+g.desc).toLowerCase().includes(q)).map(g=>
+ `<article class="card" onclick="openGame('${g.id}')">
+ <div class="cover">${g.icon}</div><div class="info"><h3>${g.name}</h3><p>${g.desc}</p></div></article>`
+ ).join("");
 }
-function favorite(i){let n=games[i].name;favorites=favorites.includes(n)?favorites.filter(x=>x!==n):[...favorites,n];localStorage.setItem("krugFavs",JSON.stringify(favorites));renderGames()}
-function showFavorites(){renderGames(games.filter(g=>favorites.includes(g.name)))}
-function showAll(){document.getElementById("search").value="";document.getElementById("category").value="All";renderGames()}
-function randomGame(){openGame(Math.floor(Math.random()*games.length))}
-function openGame(i){
- current=games[i];document.getElementById("home").style.display="none";document.getElementById("gameScreen").style.display="block";
- document.getElementById("gameTitle").textContent=current.name;document.getElementById("gameDesc").textContent=current.desc;
- best=Number(localStorage.getItem("krugBest_"+current.name)||0);document.getElementById("best").textContent=best;
- document.getElementById("overlay").style.display="flex";document.getElementById("overlayTitle").textContent="READY?";
- document.getElementById("overlayText").textContent=current.desc+" Use the controls below to play.";
- cancelAnimationFrame(raf);playing=false;paused=false;score=0;elapsed=0;drawScene(0);
- window.scrollTo(0,0);
+renderGames();
+
+const canvas=document.getElementById("gameCanvas");
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x9ac9e8);
+scene.fog=new THREE.Fog(0x9ac9e8,45,190);
+
+const camera=new THREE.PerspectiveCamera(65,1100/620,.1,500);
+camera.position.set(0,8,15);
+
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(1100,620,false);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.15;
+
+scene.add(new THREE.HemisphereLight(0xd9efff,0x66717e,2));
+const sun=new THREE.DirectionalLight(0xfff5df,2.5);
+sun.position.set(-25,45,20);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-45;sun.shadow.camera.right=45;
+sun.shadow.camera.top=60;sun.shadow.camera.bottom=-60;
+scene.add(sun);
+
+const mat=(color,rough=.8,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
+const snowMat=mat(0xeaf5ff,.95),iceMat=mat(0xb8d9e9,.3),treeMat=mat(0x60452e),leafMat=mat(0x244e3d),rockMat=mat(0x657783),darkMat=mat(0x18232c),redMat=mat(0xd83d4e,.35),blueMat=mat(0x248dcb,.35),blackMat=mat(0x111923,.6),glassMat=new THREE.MeshStandardMaterial({color:0x8cddf4,metalness:.3,roughness:.15,transparent:true,opacity:.75});
+
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(500,500),snowMat);
+ground.rotation.x=-Math.PI/2;ground.position.y=-.4;ground.position.z=-100;
+ground.receiveShadow=true;scene.add(ground);
+
+let track;
+function makeTrack(){
+ if(track)scene.remove(track);
+ const color=activeMode==="desert"?0xb88956:activeMode==="city"?0x353b46:activeMode==="mountain"?0x8fa5ad:0xd9e9f3;
+ track=new THREE.Mesh(new THREE.PlaneGeometry(17,450),mat(color,.95));
+ track.rotation.x=-Math.PI/2;track.position.set(0,-.25,-170);track.receiveShadow=true;scene.add(track);
 }
-function goHome(){playing=false;paused=false;cancelAnimationFrame(raf);document.getElementById("gameScreen").style.display="none";document.getElementById("home").style.display="block";renderGames();window.scrollTo(0,0)}
-function startGame(){
- if(!current)return;
- cancelAnimationFrame(raf);score=0;elapsed=0;last=0;keys={};objects=[];particles=[];
- s={x:480,y:400,vx:0,vy:0,lane:0,health:3,angle:0,charge:0,shots:0,combo:0,ground:420,ballX:480,ballY:430,ballVx:0,ballVy:0,phase:0};
- for(let i=0;i<8;i++)spawnObject();
- playing=true;paused=false;document.getElementById("overlay").style.display="none";updateStats();raf=requestAnimationFrame(loop);
-}
-function retryGame(){startGame()}
-function pauseGame(){
- if(!current)return;
- if(!playing&& !paused)return;
- paused=!paused;
- if(paused){playing=false;document.getElementById("overlay").style.display="flex";document.getElementById("overlayTitle").textContent="PAUSED";document.getElementById("overlayText").textContent="Take a break. Press Resume when you're ready.";document.querySelector("#overlay button").textContent="▶ RESUME";document.querySelector("#overlay button").onclick=resumeGame}
- else resumeGame();
-}
-function resumeGame(){document.getElementById("overlay").style.display="none";playing=true;paused=false;last=0;raf=requestAnimationFrame(loop)}
-function updateStats(){document.getElementById("score").textContent=Math.floor(score);document.getElementById("best").textContent=best;document.getElementById("time").textContent=Math.floor(elapsed)+"s"}
-function endGame(){
- playing=false;cancelAnimationFrame(raf);
- if(score>best){best=Math.floor(score);localStorage.setItem("krugBest_"+current.name,best)}
- updateStats();document.getElementById("overlay").style.display="flex";document.getElementById("overlayTitle").textContent="GAME OVER";
- document.getElementById("overlayText").textContent="Final score: "+Math.floor(score)+" • Best score: "+best;
- document.querySelector("#overlay button").textContent="↻ PLAY AGAIN";document.querySelector("#overlay button").onclick=startGame;
-}
-function spawnObject(){
- const t=current.type;
- let o={x:Math.random()*820+70,y:-Math.random()*500-30,r:18+Math.random()*14,v:2+Math.random()*2,kind:"obstacle"};
- if(["space","shooter","survival","tank"].includes(t)){o.x=Math.random()*850+55;o.y=-30;o.r=15+Math.random()*12;o.kind="enemy"}
- if(["soccer","basket","tennis","golf","bowling"].includes(t)){o.x=Math.random()*760+100;o.y=100+Math.random()*200;o.r=15;o.kind="target"}
- if(["fishing","ocean"].includes(t)){o.x=Math.random()*850+50;o.y=280+Math.random()*170;o.r=15;o.kind="fish"}
- objects.push(o);
-}
-function loop(ts){
- if(!playing)return;
- let dt=last?Math.min((ts-last)/16.67,2):1;last=ts;elapsed+=dt/60;
- update(dt);drawScene(dt);updateStats();
- if(playing)raf=requestAnimationFrame(loop);
-}
-function update(dt){
- let t=current.type;
- let speed=4.3*dt;
- if(keys.ArrowLeft||keys.a)s.x-=speed*1.8;
- if(keys.ArrowRight||keys.d)s.x+=speed*1.8;
- if(keys.ArrowUp||keys.w)s.y-=speed*1.8;
- if(keys.ArrowDown||keys.s)s.y+=speed*1.8;
- s.x=Math.max(35,Math.min(925,s.x));s.y=Math.max(70,Math.min(490,s.y));
- if(["drive","offroad","snow","grandprix","desert"].includes(t)){
-  if(keys.ArrowLeft||keys.a)s.x-=speed*1.5;
-  if(keys.ArrowRight||keys.d)s.x+=speed*1.5;
-  score+=dt*.18;
+let activeMode="snow",player,remotePlayer;
+let objects=[],scenery=[],particles=[];
+let running=false,paused=false,ended=false;
+let score=0,distance=0,best=0,speed=.45;
+let vx=0,vy=0,jumping=false,groundY=0;
+let keys={},lastTime=0,roomPeer=null,roomConnection=null,peerRole="";
+let remoteState=null,networkTimer=0;
+let playerX=0,worldZ=0;
+
+function makePlayer(){
+ if(player)scene.remove(player);
+ player=new THREE.Group();
+ if(activeMode==="snow"){
+  const board=new THREE.Mesh(new THREE.BoxGeometry(.65,.12,2.4),mat(0x172a43,.3,.25));
+  board.position.y=.05;board.castShadow=true;player.add(board);
+  const boots=new THREE.Mesh(new THREE.BoxGeometry(.65,.22,.5),blackMat);
+  boots.position.set(0,.24,0);player.add(boots);
+  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.85,5,10),blueMat);
+  body.position.y=.95;body.castShadow=true;player.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,20,16),mat(0xf0c69c));
+  head.position.y=1.65;head.castShadow=true;player.add(head);
+  const helmet=new THREE.Mesh(new THREE.SphereGeometry(.28,20,12,0,Math.PI*2,0,Math.PI/2),redMat);
+  helmet.position.y=1.75;player.add(helmet);
+  const arms=new THREE.Mesh(new THREE.BoxGeometry(1.05,.16,.18),blueMat);
+  arms.position.y=1.12;arms.rotation.z=-.1;player.add(arms);
+ }else{
+  const body=new THREE.Mesh(new THREE.BoxGeometry(1.65,.65,3),activeMode==="city"?redMat:activeMode==="desert"?mat(0xd4a34f,.35):mat(0x477b56,.5));
+  body.position.y=.75;body.castShadow=true;player.add(body);
+  const cabin=new THREE.Mesh(new THREE.BoxGeometry(1.15,.55,1.25),glassMat);
+  cabin.position.set(0,1.25,-.15);player.add(cabin);
+  for(let x of [-.9,.9])for(let z of [-.9,.9]){
+   const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.2,20),blackMat);
+   wheel.rotation.z=Math.PI/2;wheel.position.set(x,.4,z);player.add(wheel);
+  }
  }
- if(["parkour","jungle","skate"].includes(t)){
-  s.ground=420;
-  if((keys[" "]||keys.ArrowUp||keys.w)&&s.y>=s.ground-3)s.vy=-12;
-  s.vy+=.55*dt;s.y+=s.vy*dt;
-  if(s.y>s.ground){s.y=s.ground;s.vy=0}
+ player.position.set(0,0,5);scene.add(player);
+}
+
+function makeTree(x,z,scale=1){
+ const g=new THREE.Group();
+ const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18*scale,.27*scale,2.1*scale,8),treeMat);
+ trunk.position.y=1.05*scale;trunk.castShadow=true;g.add(trunk);
+ for(let i=0;i<3;i++){
+  const cone=new THREE.Mesh(new THREE.ConeGeometry((1.2-i*.23)*scale,2.0*scale,9),leafMat);
+  cone.position.y=(2.0+i*.9)*scale;cone.castShadow=true;g.add(cone);
  }
- if(t==="flight"){s.y+=((keys.ArrowDown||keys.s)?3:(keys.ArrowUp||keys.w)?-3:0)*dt;score+=dt*.3}
- if(t==="fishing"){
-  if(keys[" "]&&!s.cast){s.cast=true;s.castTime=0}
-  if(s.cast){s.castTime+=dt;if(s.castTime>100){s.cast=false;s.castTime=0;score+=Math.random()>.35?30:0}}
- }
- if(["soccer","basket","tennis","golf","bowling"].includes(t)){
-  if(keys[" "]&&!s.action){s.action=true;s.actionTime=0;s.shots++}
-  if(s.action){s.actionTime+=dt;if(s.actionTime>28){s.action=false;let hit=Math.random();if(hit>.36){score+=t==="bowling"?25:10;burst(s.x,s.y)}else score=Math.max(0,score-1)}}
- }
- if(t==="ocean"){score+=dt*.12}
- if(t==="space"||t==="shooter"||t==="survival"||t==="tank"){
-  if(keys[" "]&&(!s.lastShot||elapsed-s.lastShot>.3)){s.lastShot=elapsed;objects.push({x:s.x,y:s.y-35,r:6,v:8,kind:"bullet"});s.shots++}
- }
- for(let i=objects.length-1;i>=0;i--){
-  let o=objects[i];
-  if(o.kind==="bullet"){o.y-=o.v*dt;if(o.y<-20)objects.splice(i,1);continue}
-  if(["soccer","basket","tennis","golf","bowling"].includes(t)){o.y+=Math.sin(elapsed*2+i)*.25*dt;continue}
-  if(["fishing","ocean"].includes(t)){o.x+=Math.sin(elapsed*1.5+i)*.8*dt;continue}
-  o.y+=o.v*dt*(["drive","offroad","snow","grandprix","desert"].includes(t)?1.3:1);
-  if(o.y>570){objects.splice(i,1);score+=2;spawnObject();continue}
-  if(Math.hypot(o.x-s.x,o.y-s.y)<o.r+19){
-   if(o.kind==="enemy"||o.kind==="obstacle"){
-    if(t==="survival"||t==="space"||t==="shooter"||t==="tank"||["drive","offroad","snow","grandprix","desert","parkour","jungle","skate","flight"].includes(t)){
-     objects.splice(i,1);s.health--;burst(s.x,s.y);
-     if(s.health<=0){endGame();return}
-    }
+ g.position.set(x,0,z);scene.add(g);return g;
+}
+function makeRock(x,z){
+ const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.65+Math.random()*.55,1),rockMat);
+ rock.position.set(x,.25,z);rock.scale.y=.7;rock.rotation.set(Math.random(),Math.random(),Math.random());rock.castShadow=true;scene.add(rock);return rock;
+}
+function makeSnowman(x,z){
+ const g=new THREE.Group();
+ const bottom=new THREE.Mesh(new THREE.SphereGeometry(.55,18,14),snowMat);bottom.position.y=.55;g.add(bottom);
+ const middle=new THREE.Mesh(new THREE.SphereGeometry(.38,18,14),snowMat);middle.position.y=1.35;g.add(middle);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.28,18,14),snowMat);head.position.y=1.95;g.add(head);
+ const hat=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.25,12),darkMat);hat.position.y=2.2;g.add(hat);
+ const nose=new THREE.Mesh(new THREE.ConeGeometry(.09,.38,8),mat(0xf28a32));nose.rotation.x=Math.PI/2;nose.position.set(0,1.95,.28);g.add(nose);
+ g.position.set(x,0,z);scene.add(g);return g;
+}
+function makeRamp(x,z){
+ const r=new THREE.Mesh(new THREE.BoxGeometry(3,.35,4),mat(0x9ec9df,.6));
+ r.position.set(x,.35,z);r.rotation.x=-.16;r.castShadow=true;scene.add(r);return r;
+}
+function clearWorld(){
+ for(const o of [...objects,...scenery])scene.remove(o);
+ objects=[];scenery=[];
+}
+function buildWorld(){
+ clearWorld();
+ makeTrack();
+ for(let i=0;i<35;i++){
+  const z=-i*10-15;
+  if(activeMode==="snow"||activeMode==="mountain"){
+   for(let side of [-1,1]){
+    let x=side*(10+Math.random()*13);
+    scenery.push(makeTree(x,z+Math.random()*5,.7+Math.random()*.8));
    }
   }
-  if(o.kind==="fish"&&Math.hypot(o.x-s.x,o.y-s.y)<o.r+18){objects.splice(i,1);score+=15;spawnObject()}
  }
- if(objects.length<7&&Math.random()<.025)spawnObject();
- if(["space","shooter","survival","tank"].includes(t)){
-  for(let i=objects.length-1;i>=0;i--){let o=objects[i];if(o.kind!=="enemy")continue;
-   for(let j=objects.length-1;j>=0;j--){let b=objects[j];if(b.kind==="bullet"&&Math.hypot(b.x-o.x,b.y-o.y)<o.r+8){objects.splice(i,1);objects.splice(j,1);score+=10;burst(o.x,o.y);break}}
+ for(let i=0;i<24;i++){
+  const z=-25-i*13-Math.random()*8;
+  const lane=(Math.random()*3-1)*4.4;
+  const roll=Math.random();
+  let obj;
+  if(activeMode==="snow"){
+   if(roll<.55)obj=makeTree(lane,z,.8+Math.random()*.5);
+   else if(roll<.9)obj=makeRock(lane,z);
+   else obj=makeRamp(lane,z);
+  }else{
+   if(roll<.65)obj=makeRock(lane,z);
+   else obj=makeRamp(lane,z);
+  }
+  objects.push({mesh:obj,type:obj.geometry?.type==="BoxGeometry"?"ramp":"obstacle",hit:false});
+ }
+}
+function addRemote(){
+ if(remotePlayer)scene.remove(remotePlayer);
+ remotePlayer=new THREE.Group();
+ const board=new THREE.Mesh(new THREE.BoxGeometry(.65,.12,2.4),mat(0xffcf44,.3));
+ board.position.y=.05;remotePlayer.add(board);
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.85,5,10),mat(0xe85b70));
+ body.position.y=.95;remotePlayer.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.25,16,12),mat(0xf0c69c));
+ head.position.y=1.65;remotePlayer.add(head);
+ remotePlayer.position.set(3,0,5);scene.add(remotePlayer);
+}
+function resetGame(){
+ score=0;distance=0;speed=.45;vx=0;vy=0;jumping=false;playerX=0;worldZ=0;
+ document.getElementById("score").textContent="0";
+ document.getElementById("distance").textContent="0";
+ best=Number(localStorage.getItem("krugBest_"+activeMode)||0);
+ document.getElementById("best").textContent=best;
+ makePlayer();buildWorld();
+ camera.position.set(0,8,15);camera.lookAt(0,1,-8);
+}
+function openGame(id){
+ activeMode=id;
+ const g=games.find(x=>x.id===id);
+ document.getElementById("home").style.display="none";
+ document.getElementById("gameScreen").style.display="block";
+ document.getElementById("gameTitle").textContent=g.name;
+ document.getElementById("gameDescription").textContent=g.desc;
+ document.getElementById("overlayTitle").textContent=g.name;
+ document.getElementById("overlayText").textContent=g.desc+" Avoid obstacles and see how far you can travel.";
+ document.getElementById("overlayButton").textContent="▶ START GAME";
+ document.getElementById("overlayButton").onclick=startGame;
+ document.getElementById("overlay").style.display="flex";
+ running=false;paused=false;ended=false;
+ resetGame();window.scrollTo(0,0);
+}
+function startGame(){
+ resetGame();running=true;paused=false;ended=false;lastTime=0;
+ document.getElementById("overlay").style.display="none";
+ renderer.setAnimationLoop(animate);
+}
+function retryGame(){startGame()}
+function goHome(){
+ running=false;paused=false;renderer.setAnimationLoop(null);
+ document.getElementById("gameScreen").style.display="none";
+ document.getElementById("home").style.display="block";
+}
+function pauseGame(){
+ if(!running&&!paused)return;
+ if(running){
+  running=false;paused=true;
+  document.getElementById("overlayTitle").textContent="PAUSED";
+  document.getElementById("overlayText").textContent="Your run is paused.";
+  document.getElementById("overlayButton").textContent="▶ RESUME";
+  document.getElementById("overlayButton").onclick=resumeGame;
+  document.getElementById("overlay").style.display="flex";
+ }else resumeGame();
+}
+function resumeGame(){
+ paused=false;running=true;lastTime=0;
+ document.getElementById("overlay").style.display="none";
+}
+function finishGame(){
+ running=false;ended=true;
+ renderer.setAnimationLoop(null);
+ best=Math.max(best,Math.floor(score));
+ localStorage.setItem("krugBest_"+activeMode,best);
+ document.getElementById("best").textContent=best;
+ document.getElementById("overlayTitle").textContent="RUN OVER!";
+ document.getElementById("overlayText").textContent="Distance: "+Math.floor(distance)+" m • Score: "+Math.floor(score);
+ document.getElementById("overlayButton").textContent="↻ TRY AGAIN";
+ document.getElementById("overlayButton").onclick=startGame;
+ document.getElementById("overlay").style.display="flex";
+}
+function animate(time){
+ if(!running)return;
+ const dt=lastTime?Math.min((time-lastTime)/16.67,2):1;
+ lastTime=time;
+ update(dt);renderer.render(scene,camera);
+}
+function update(dt){
+ const left=keys.ArrowLeft||keys.a||keys.A;
+ const right=keys.ArrowRight||keys.d||keys.D;
+ if(left)vx-=.018*dt;
+ if(right)vx+=.018*dt;
+ vx*=Math.pow(.91,dt);
+ playerX+=vx*dt;
+ playerX=Math.max(-6.2,Math.min(6.2,playerX));
+ player.position.x=playerX;
+ player.rotation.z=-vx*.12;
+ if(activeMode==="snow"){
+  if((keys[" "]||keys.ArrowUp||keys.w)&&!jumping){vy=.25;jumping=true}
+  if(jumping){vy-=.014*dt;player.position.y+=vy*dt;if(player.position.y<=0){player.position.y=0;vy=0;jumping=false}}
+ }else{
+  if(keys.ArrowUp||keys.w)distance+=speed*dt*1.5;
+  if(keys.ArrowDown||keys.s)distance+=speed*dt*.4;
+ }
+ const accel=activeMode==="snow"?.0015:.001;
+ speed=Math.min(1.15,speed+accel*dt);
+ distance+=speed*dt*1.8;
+ score+=speed*dt*1.2;
+ const advance=speed*dt*1.8;
+ for(const item of objects){
+  item.mesh.position.z+=advance;
+  if(item.mesh.position.z>12){
+   item.mesh.position.z=-300-Math.random()*80;
+   item.mesh.position.x=(Math.random()*2-1)*5;
+   item.hit=false;
+  }
+  if(item.type==="ramp"&&Math.abs(item.mesh.position.z-5)<1.4&&Math.abs(item.mesh.position.x-playerX)<2.1&&!item.hit){
+   item.hit=true;vy=.35;jumping=true;player.position.y+=.25;
+   score+=30;
+  }
+  if(item.type==="obstacle"&&Math.abs(item.mesh.position.z-5)<1.3&&Math.abs(item.mesh.position.x-playerX)<1.45&&!jumping&&!item.hit){
+   item.hit=true;finishGame();return;
   }
  }
- if(t==="fishing"&&s.castTime>0)score+=0;
- for(let p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt}
- particles=particles.filter(p=>p.life>0);
- if(elapsed>90){endGame()}
-}
-function burst(x,y){for(let i=0;i<12;i++){let a=Math.random()*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*Math.random()*4,vy:Math.sin(a)*Math.random()*4,life:25})}}
-function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x,y,w,h)}
-function circle(x,y,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
-function line(x,y,x2,y2,c,w=2){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke()}
-function text(t,x,y,size=20,c="#fff"){ctx.fillStyle=c;ctx.font="bold "+size+"px Arial";ctx.fillText(t,x,y)}
-function drawScene(){
- let t=current.type;let sky=current.sky;
- rect(0,0,W,H,sky);
- // atmospheric sky and distant scenery
- for(let i=0;i<7;i++){let x=(i*173+elapsed*5)%1100-100;circle(x,90+(i%3)*30,35,"#ffffff0a")}
- if(["drive","grandprix","desert","snow","offroad"].includes(t))drawRoad(t);
- else if(["soccer","basket","tennis","golf","bowling"].includes(t))drawSports(t);
- else if(t==="flight")drawFlight();
- else if(t==="ocean"||t==="fishing")drawWater(t);
- else if(t==="space"||t==="shooter"||t==="survival")drawSpace();
- else if(t==="tank")drawTankArena();
- else drawAdventure(t);
- // objects
- for(let o of objects){
-  if(o.kind==="bullet"){circle(o.x,o.y,6,"#ffe56a");circle(o.x,o.y,10,"#ffe56a44");continue}
-  if(o.kind==="fish"){drawFish(o.x,o.y,o.r);continue}
-  if(o.kind==="target"){circle(o.x,o.y,o.r,"#fff");circle(o.x,o.y,o.r*.65,"#df4545");circle(o.x,o.y,o.r*.3,"#fff");continue}
-  if(o.kind==="enemy"){drawEnemy(o.x,o.y,o.r);continue}
-  drawObstacle(o.x,o.y,o.r,t);
+ for(const tree of scenery){
+  tree.position.z+=advance;
+  if(tree.position.z>15)tree.position.z=-350-Math.random()*100;
  }
- drawPlayer(t);
- for(let p of particles)circle(p.x,p.y,3,"#ffdb73");
- text("HP "+ "♥".repeat(Math.max(0,s.health)),25,38,18,"#ff9b9b");
- if(t==="fishing"&&s.cast)text("LINE IN WATER...",390,80,20,"#fff");
+ // Snowy mountains in the far background
+ camera.position.x+=(playerX*.35-camera.position.x)*.035;
+ camera.position.y+=(8+player.position.y*.3-camera.position.y)*.035;
+ camera.lookAt(playerX*.25,1.2,-10);
+ player.position.z=5;
+ if(remotePlayer&&remoteState){
+  remotePlayer.position.x+=(remoteState.x-remotePlayer.position.x)*.2;
+  remotePlayer.position.y+=(remoteState.y-remotePlayer.position.y)*.2;
+  remotePlayer.position.z=5;
+ }
+ networkTimer+=dt;
+ if(networkTimer>5){networkTimer=0;sendState()}
+ document.getElementById("score").textContent=Math.floor(score);
+ document.getElementById("distance").textContent=Math.floor(distance);
+ if(Math.floor(score)>best)document.getElementById("best").textContent=Math.floor(score);
 }
-function drawRoad(t){
- let ground=t==="snow"?"#d9edf3":t==="desert"?"#bd8751":t==="offroad"?"#52634a":"#28363c";
- rect(0,310,W,230,ground);
- // road perspective
- ctx.fillStyle=t==="snow"?"#718c9d":t==="desert"?"#69503c":"#30343b";
- ctx.beginPath();ctx.moveTo(320,300);ctx.lineTo(640,300);ctx.lineTo(900,540);ctx.lineTo(60,540);ctx.closePath();ctx.fill();
- line(480,310,480,540,"#f7e8b5",4);
- for(let y=340;y<540;y+=70){let yy=y+((elapsed*130)%70);rect(475,yy,10,30,"#fff2c8")}
- for(let side of [0,1])for(let i=0;i<5;i++){let x=side?760+i*65:200-i*65;let y=300+i*45+((elapsed*60)%45);if(t==="snow"){circle(x,y,18+i*2,"#e9f7ff");rect(x-4,y,8,18,"#72543c")}else if(t==="desert"){rect(x,y,9,45,"#62482e");circle(x+5,y-7,25,"#a1a05b")}else{rect(x,y,9,45,"#62482e");circle(x+5,y-15,27,"#28563d")}}
+function fullScreen(){
+ const el=document.querySelector(".stage");
+ if(!document.fullscreenElement)el.requestFullscreen?.();
+ else document.exitFullscreen?.();
 }
-function drawSports(t){
- rect(0,330,W,210,t==="basket"?"#b77c4e":t==="bowling"?"#253b57":"#347a4b");
- if(t==="soccer"){rect(100,350,760,170,"#3d9659");for(let i=0;i<6;i++)line(100,350+i*28,860,350+i*28,"#ffffff33");ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.strokeRect(350,355,260,165);ctx.strokeRect(405,380,150,95);rect(420,330,120,14,"#fff")}
- if(t==="basket"){rect(0,440,W,100,"#9e653e");circle(480,430,75,"#fff2");rect(700,240,10,145,"#d8e4ed");rect(670,230,70,9,"#fff");circle(705,245,23,"#d7e4eb");line(685,245,725,245,"#d44d37",4)}
- if(t==="tennis"){rect(120,330,720,190,"#397e9e");rect(145,345,670,155,"#2f985e");line(480,345,480,500,"#fff",3);line(145,420,815,420,"#fff",3);line(480,345,480,500,"#fff",2)}
- if(t==="golf"){circle(480,420,105,"#4c9d5b");circle(480,420,65,"#6ab96c");circle(520,400,5,"#111");line(520,400,520,325,"#fff",3);rect(520,325,38,20,"#e43e46")}
- if(t==="bowling"){for(let i=0;i<4;i++)line(250+i*150,330,350+i*80,530,"#d6e2f0");for(let i=0;i<10;i++){let x=400+(i%4)*55-(Math.floor(i/4)*27);let y=190+Math.floor(i/4)*35;drawPin(x,y)}}
-}
-function drawPin(x,y){circle(x,y,11,"#fff");rect(x-8,y,16,25,"#fff");rect(x-8,y+5,16,4,"#d83d42")}
-function drawFlight(){rect(0,340,W,200,"#79b8db");for(let i=0;i<6;i++){let x=(i*190+elapsed*35)%1100-100;circle(x,140+i%3*35,35,"#fff9");circle(x+28,145+i%3*35,25,"#fff9")}line(0,390,960,390,"#fff5",2);text("FLIGHT PATH",25,45,15,"#fff")}
-function drawWater(t){rect(0,230,W,310,t==="ocean"?"#075071":"#286d91");for(let i=0;i<12;i++){let y=270+i*24;line((elapsed*35+i*95)%1100-100,y,(elapsed*35+i*95)%1100+80,y,"#7bd7ed55",2)}if(t==="ocean"){circle(700,150,65,"#f3dc9a");for(let i=0;i<4;i++)drawFish(160+i*190,350+i%2*70,17)}else{rect(0,230,W,14,"#1b604c");circle(780,150,42,"#ffe18b")}
-}
-function drawSpace(){rect(0,0,W,H,"#080b20");for(let i=0;i<80;i++){let x=(i*137)%W,y=(i*79+elapsed*25)%H;circle(x,y,1.5,"#fff");}circle(780,110,65,"#7d4bbd44");circle(780,110,45,"#a66ee055")}
-function drawTankArena(){rect(0,0,W,H,"#52634a");for(let i=0;i<12;i++){rect((i*97)%W,(i*151)%H,55,35,"#374a38");rect((i*97)%W+5,(i*151)%H+5,45,25,"#637753")}}
-function drawAdventure(t){
- rect(0,420,W,120,t==="jungle"?"#315e3c":t==="parkour"?"#43566a":t==="skate"?"#786d62":"#334d43");
- if(t==="parkour"){for(let i=0;i<6;i++){let x=i*190+((elapsed*55)%190);rect(x,390-(i%3)*35,125,150,"#5a6e80");rect(x,390-(i%3)*35,125,8,"#a8c0d2")}}
- else if(t==="jungle"){for(let i=0;i<10;i++){let x=i*110;rect(x,230,13,210,"#604c2e");circle(x+5,220,55,"#23603c");circle(x+30,250,35,"#34764b")}}
- else if(t==="skate"){rect(150,360,660,35,"#9e9e9e");rect(230,330,120,30,"#777");rect(600,310,140,50,"#777")}
- else{for(let i=0;i<5;i++){rect(i*220,380-(i%2)*50,160,160,"#526e54")}}
-}
-function drawObstacle(x,y,r,t){
- if(t==="snow"){circle(x,y,r,"#e7f4f7");circle(x-r*.25,y-r*.2,r*.22,"#fff")}
- else if(t==="desert"){rect(x-r,y-r,r*2,r*2,"#8e5a32");circle(x,y-r,r*.8,"#b77942")}
- else if(t==="offroad"){circle(x,y,r,"#77796b");circle(x-5,y-5,r*.5,"#99998c")}
- else{rect(x-r,y-r,r*2,r*2,"#9b493c");rect(x-r*.6,y-r*.7,r*1.2,r*.4,"#e5b16b")}
-}
-function drawEnemy(x,y,r){circle(x,y,r,"#e64b60");circle(x-5,y-4,3,"#fff");circle(x+5,y-4,3,"#fff");line(x-5,y+7,x+5,y+7,"#fff",2)}
-function drawFish(x,y,r){ctx.fillStyle="#f4b85a";ctx.beginPath();ctx.ellipse(x,y,r*1.3,r*.7,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x-r*1.8,y-r);ctx.lineTo(x-r*1.8,y+r);ctx.fill();circle(x+r*.5,y-3,2,"#111")}
-function drawPlayer(t){
- let x=s.x,y=s.y;
- if(["drive","offroad","snow","grandprix","desert"].includes(t)){
-  ctx.save();ctx.translate(x,y);ctx.fillStyle=t==="snow"?"#e8f6ff":"#d83f4b";ctx.beginPath();ctx.moveTo(0,-32);ctx.lineTo(20,20);ctx.lineTo(-20,20);ctx.closePath();ctx.fill();rect(-18,0,36,15,"#26333c");rect(-12,-17,24,13,"#8fe7ff");ctx.restore();
- }else if(t==="flight"){
-  ctx.save();ctx.translate(x,y);ctx.fillStyle="#e8edf5";ctx.beginPath();ctx.moveTo(0,-30);ctx.lineTo(12,15);ctx.lineTo(40,28);ctx.lineTo(40,35);ctx.lineTo(0,24);ctx.lineTo(-40,35);ctx.lineTo(-40,28);ctx.lineTo(-12,15);ctx.closePath();ctx.fill();ctx.restore();
- }else if(["space","shooter","survival"].includes(t)){
-  ctx.fillStyle="#8adfff";ctx.beginPath();ctx.moveTo(x,y-27);ctx.lineTo(x+22,y+22);ctx.lineTo(x,y+12);ctx.lineTo(x-22,y+22);ctx.closePath();ctx.fill();circle(x,y,9,"#d9f7ff");
- }else if(t==="tank"){
-  rect(x-24,y-20,48,40,"#728b56");rect(x-6,y-32,12,25,"#b6c59b");rect(x-32,y-16,8,32,"#252d29");rect(x+24,y-16,8,32,"#252d29");
- }else if(["soccer","basket","tennis","golf","bowling"].includes(t)){
-  circle(x,y,18,"#e9c59a");circle(x,y-24,13,"#273e58");rect(x-13,y-5,26,29,"#287cc2");
- }else if(t==="fishing"){circle(x,y,15,"#f0c99c");rect(x-10,y+10,20,24,"#e7e8e5");line(x+8,y-5,x+45,y-65,"#a47b42",3);line(x+45,y-65,x+65,y+20,"#fff",2)}
- else if(t==="ocean"){circle(x,y,20,"#f0c99c");rect(x-14,y-8,28,28,"#45d4c4");circle(x,y-15,13,"#a4dce8")}
- else if(t==="bowling"){circle(x,y,19,"#e8b65e");circle(x-6,y-5,3,"#222");circle(x+6,y-5,3,"#222")}
- else{circle(x,y,17,"#f1c99d");rect(x-12,y+10,24,29,"#38a5d8");line(x-8,y+35,x-18,y+52,"#182b3a",6);line(x+8,y+35,x+18,y+52,"#182b3a",6)}
-}
-function toggleFullscreen(){let el=document.querySelector(".stage");if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}
-function hold(k){keys[k]=true}
+function press(k){keys[k]=true}
 function release(k){keys[k]=false}
-window.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();keys[e.key]=true;if(e.key==="Escape"&&playing)pauseGame()});
+window.addEventListener("keydown",e=>{
+ if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," "].includes(e.key))e.preventDefault();
+ keys[e.key]=true;
+ if(e.key.toLowerCase()==="p")pauseGame();
+});
 window.addEventListener("keyup",e=>keys[e.key]=false);
 window.addEventListener("blur",()=>keys={});
-canvas.addEventListener("pointermove",e=>{let r=canvas.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*W;mouse.y=(e.clientY-r.top)/r.height*H;if(playing&&["fishing","soccer","basket","tennis","golf","bowling"].includes(current.type)){s.x=mouse.x;s.y=mouse.y}});
-canvas.addEventListener("pointerdown",e=>{mouse.down=true;if(playing){let r=canvas.getBoundingClientRect();s.x=(e.clientX-r.left)/r.width*W;s.y=(e.clientY-r.top)/r.height*H;keys[" "]=true}});
-window.addEventListener("pointerup",()=>{mouse.down=false;keys[" "]=false});
-function drawSceneStatic(){ctx.fillStyle="#101b30";ctx.fillRect(0,0,W,H);text("KRUG PRODUCTIONS",300,240,40);text("PRESS PLAY TO START",360,290,20)}
-function drawScene(dt){if(!current){drawSceneStatic();return}drawSceneReal(dt)}
-function drawSceneReal(dt){drawSceneBackground();drawSceneObjects();drawScenePlayer()}
-function drawSceneBackground(){let t=current.type;rect(0,0,W,H,current.sky);if(["drive","offroad","snow","grandprix","desert"].includes(t))drawRoad(t);else if(["soccer","basket","tennis","golf","bowling"].includes(t))drawSports(t);else if(t==="flight")drawFlight();else if(t==="ocean"||t==="fishing")drawWater(t);else if(["space","shooter","survival"].includes(t))drawSpace();else if(t==="tank")drawTankArena();else drawAdventure(t)}
-function drawSceneObjects(){for(let o of objects){if(o.kind==="bullet"){circle(o.x,o.y,6,"#ffe56a");continue}if(o.kind==="fish"){drawFish(o.x,o.y,o.r);continue}if(o.kind==="target"){circle(o.x,o.y,o.r,"#fff");circle(o.x,o.y,o.r*.6,"#d44");continue}if(o.kind==="enemy"){drawEnemy(o.x,o.y,o.r);continue}drawObstacle(o.x,o.y,o.r,current.type)}for(let p of particles)circle(p.x,p.y,3,"#ffdb73")}
-function drawScenePlayer(){drawPlayer(current.type);text("HP "+ "♥".repeat(Math.max(0,s.health)),25,38,18,"#ff9b9b");if(current.type==="fishing"&&s.cast)text("LINE IN WATER...",390,80,20,"#fff")}
-function drawScene(dt){if(!current){drawSceneStatic();return}drawSceneBackground();drawSceneObjects();drawScenePlayer()}
-renderGames();
+window.addEventListener("resize",()=>{
+ const w=canvas.clientWidth||1100;
+ const h=w*620/1100;
+ renderer.setSize(w,h,false);
+ camera.aspect=1100/620;camera.updateProjectionMatrix();
+});
+canvas.addEventListener("pointermove",e=>{
+ if(!running)return;
+ const r=canvas.getBoundingClientRect();
+ const x=(e.clientX-r.left)/r.width;
+ playerX=(x-.5)*12.4;
+});
+canvas.addEventListener("pointerdown",()=>{if(activeMode==="snow"&&!jumping){keys[" "]=true;setTimeout(()=>keys[" "]=false,120)}});
+
+/* Multiplayer: host creates a room code; guest connects using that code. */
+function setRoomStatus(message){document.getElementById("roomStatus").textContent=message}
+function closeRoom(){
+ if(roomConnection){roomConnection.close();roomConnection=null}
+ if(roomPeer){roomPeer.destroy();roomPeer=null}
+ remoteState=null;
+ if(remotePlayer){scene.remove(remotePlayer);remotePlayer=null}
+}
+function createRoom(){
+ closeRoom();
+ if(!window.Peer){setRoomStatus("Multiplayer connection library did not load. Solo play is still available.");return}
+ setRoomStatus("Creating room...");
+ roomPeer=new Peer();
+ roomRole="host";
+ roomPeer.on("open",id=>{
+  document.getElementById("roomCode").value=id;
+  setRoomStatus("Room created! Share this code with your friend: "+id);
+ });
+ roomPeer.on("connection",conn=>{
+  roomConnection=conn;
+  setupConnection(conn);
+ });
+ roomPeer.on("error",err=>setRoomStatus("Connection error: "+err.type+". You can still play solo."));
+}
+function joinRoom(){
+ const id=document.getElementById("roomCode").value.trim();
+ if(!id){setRoomStatus("Enter your friend's room code first.");return}
+ closeRoom();
+ if(!window.Peer){setRoomStatus("Multiplayer connection library did not load. Solo play is still available.");return}
+ setRoomStatus("Connecting to room...");
+ roomPeer=new Peer();
+ roomRole="guest";
+ roomPeer.on("open",()=>{
+  roomConnection=roomPeer.connect(id,{reliable:true});
+  setupConnection(roomConnection);
+ });
+ roomPeer.on("error",err=>setRoomStatus("Could not connect: "+err.type+". Check the code and try again."));
+}
+function setupConnection(conn){
+ roomConnection=conn;
+ conn.on("open",()=>{
+  setRoomStatus("🟢 Connected! You are in the multiplayer room.");
+  addRemote();
+ });
+ conn.on("data",data=>{
+  if(data&&data.kind==="position")remoteState=data;
+ });
+ conn.on("close",()=>setRoomStatus("Your friend disconnected."));
+ conn.on("error",()=>setRoomStatus("Multiplayer connection interrupted."));
+}
+function sendState(){
+ if(roomConnection&&roomConnection.open&&player){
+  roomConnection.send({kind:"position",x:player.position.x,y:player.position.y});
+ }
+}
+window.openGame=openGame;
+window.startGame=startGame;
+window.retryGame=retryGame;
+window.pauseGame=pauseGame;
+window.goHome=goHome;
+window.fullScreen=fullScreen;
+window.press=press;
+window.release=release;
+window.createRoom=createRoom;
+window.joinRoom=joinRoom;
 </script>
 </body>
 </html>
