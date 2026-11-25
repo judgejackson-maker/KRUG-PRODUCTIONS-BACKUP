@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRUG PRODUCTIONS BACKUP</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #080d1c;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 25px;
+  text-align: center;
+  background: linear-gradient(120deg,#101b40,#5122a8);
+}
+h1 { font-size: 36px; margin: 5px; }
+header p { color: #c5caff; }
+.search {
+  display: block;
+  margin: 25px auto;
+  padding: 15px;
+  width: 85%;
+  max-width: 500px;
+  border-radius: 12px;
+  border: 2px solid #795aff;
+  background: #151d35;
+  color: white;
+  font-size: 17px;
+}
+.games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 18px;
+  padding: 25px;
+}
+.game {
+  background: linear-gradient(145deg,#202d50,#39206b);
+  padding: 30px 15px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid #6555bd;
+  transition: .2s;
+}
+.game:hover {
+  transform: translateY(-6px);
+}
+button {
+  background: #795aff;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>🚀 KRUG PRODUCTIONS BACKUP</h1>
+<p>THE ULTIMATE GAMING ZONE</p>
+</header>
+
+<input class="search" id="search" placeholder="🔎 Search games..." oninput="filterGames()">
+
+<div class="games" id="games">
+<div class="game"><h2>🏎️ Racing</h2><p>Racing games</p></div>
+<div class="game"><h2>💥 Destruction</h2><p>Car destruction games</p></div>
+<div class="game"><h2>⚽ Sports</h2><p>Sports games</p></div>
+<div class="game"><h2>🧱 Arcade</h2><p>Arcade games</p></div>
+<div class="game"><h2>🏂 Snow Games</h2><p>Snowboarding fun</p></div>
+<div class="game"><h2>🎯 Action</h2><p>Action games</p></div>
+</div>
+
+<center>
+<button onclick="document.documentElement.requestFullscreen()">⛶ FULLSCREEN</button>
+</center>
+
+<script>
+function filterGames() {
+  let search = document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll(".game").forEach(game => {
+    game.style.display = game.innerText.toLowerCase().includes(search) ? "" : "none";
+  });
+}
+</script>
+</body>
+</html>
