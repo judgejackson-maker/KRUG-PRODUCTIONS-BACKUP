@@ -170,6 +170,60 @@ function addCylinder(parent,x,y,z,r1,r2,h,color){
  m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m;
 }
 function addGround(){
+  function roadCenter(z){
+ return Math.sin(z*.018)*3.2 + Math.sin(z*.043)*1.1;
+}
+
+function createCurvyRoad(){
+ const vertices=[];
+ const indices=[];
+ const steps=500;
+ const width=6.5;
+
+ for(let i=0;i<=steps;i++){
+  const z=40-i*10;
+  const center=roadCenter(z);
+
+  vertices.push(center-width,.04,z);
+  vertices.push(center+width,.04,z);
+
+  if(i<steps){
+   const a=i*2;
+   indices.push(a,a+1,a+2,a+1,a+3,a+2);
+  }
+ }
+
+ const geometry=new THREE.BufferGeometry();
+ geometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(vertices,3)
+ );
+ geometry.setIndex(indices);
+ geometry.computeVertexNormals();
+
+ const road=new THREE.Mesh(
+  geometry,
+  new THREE.MeshStandardMaterial({
+   color:game.road,
+   roughness:.95,
+   side:THREE.DoubleSide
+  })
+ );
+
+ road.receiveShadow=true;
+ scene.add(road);
+
+ // Dashed center markings follow the bends.
+ for(let i=0;i<50;i++){
+  const z=20-i*10;
+  const mark=addBox(
+   scene,roadCenter(z),.12,z,.13,.035,3.2,0xe9e9e9
+  );
+  mark.rotation.y=-Math.atan(
+   (roadCenter(z+1)-roadCenter(z-1))/2
+  );
+ }
+}
  const floor=new THREE.Mesh(new THREE.PlaneGeometry(500,500),mat(game.ground));
  floor.rotation.x=-Math.PI/2;floor.position.y=-.15;
  floor.receiveShadow=true;scene.add(floor);
