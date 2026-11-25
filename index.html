@@ -3,397 +3,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KRUG PRODUCTIONS BACKUP</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080b19;color:white;font-family:Arial,sans-serif}
-header{text-align:center;padding:30px;background:linear-gradient(120deg,#101a50,#6422a8,#092d64)}
-header h1{font-size:clamp(26px,5vw,45px)}
-nav{text-align:center;padding:16px;background:#11162d}
-nav a{color:#cdbaff;text-decoration:none;margin:12px}
-.search{display:block;width:85%;max-width:550px;margin:25px auto;padding:15px;border-radius:12px;background:#171b34;border:2px solid #8755ff;color:white;font-size:17px}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;padding:22px}
-.card{background:linear-gradient(145deg,#202c50,#371653);border:1px solid #8059c9;border-radius:18px;overflow:hidden;transition:.25s}
-.card:hover{transform:translateY(-8px) scale(1.02)}
-.art{height:155px;display:grid;place-items:center;font-size:85px;background:radial-gradient(circle,#627caa,#17203e);text-shadow:0 8px 15px #000}
-.info{padding:18px}
-.info p{color:#c9d0e5}
-button{background:#8050ff;color:white;border:0;border-radius:9px;padding:12px 18px;margin:4px;font-weight:bold;cursor:pointer}
-button:hover{background:#a477ff}
-.play{background:#159b78}
-#player{display:none;max-width:1100px;margin:20px auto;padding:14px;background:#11182d;border-radius:18px}
-#gameTitle{text-align:center}
-canvas{width:100%;height:auto;display:block;border-radius:12px;background:#101a30}
-.stats{display:flex;justify-content:space-around;flex-wrap:wrap;padding:12px;font-size:19px}
-.controls{display:flex;justify-content:center;gap:25px;padding:12px}
-.controls button{font-size:25px;min-width:90px}
-#message{text-align:center;color:#d8e5ff;min-height:25px}
-footer{text-align:center;padding:30px;color:#aaa}
+body{margin:0;background:#080b14;color:white;font-family:Arial,sans-serif}
+header{background:#10182b;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-bottom:1px solid #263653}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px}
+.logo span{color:#46c8ff}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav button,.smallbtn{background:transparent;color:#c8d8ef;border:0;cursor:pointer;font-weight:bold}
+nav button:hover{color:#46c8ff}
+.hero{padding:55px 6% 45px;background:linear-gradient(120deg,#101c38,#172b50,#10182b);text-align:center}
+.hero h1{font-size:clamp(32px,6vw,62px);margin:0 0 12px}
+.hero h1 span{color:#46c8ff}
+.hero p{color:#b6c7e0;font-size:16px}
+.search{width:min(550px,95%);padding:15px 18px;border-radius:12px;border:1px solid #385274;background:#0b1425;color:white;font-size:16px;margin-top:18px;outline:none}
+.search:focus{border-color:#46c8ff}
+main{padding:28px 5%;max-width:1500px;margin:auto}
+.sectiontop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.sectiontop h2{font-size:25px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}
+.filters button{background:#17243b;color:#c9d8ed;border:1px solid #2a3e5d;padding:9px 15px;border-radius:20px;cursor:pointer}
+.filters button.active,.filters button:hover{background:#147cb0;color:white}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.card{background:#111a2b;border:1px solid #263954;border-radius:15px;overflow:hidden;transition:.2s}
+.card:hover{transform:translateY(-5px);border-color:#46c8ff}
+.cover{height:150px;display:flex;align-items:center;justify-content:center;font-size:65px;background:linear-gradient(135deg,#183b62,#101827);position:relative}
+.cover.snow{background:linear-gradient(140deg,#a9dff5,#416e9c)}
+.cover.race{background:linear-gradient(140deg,#552b39,#17243b)}
+.cover.off{background:linear-gradient(140deg,#5a4830,#172b29)}
+.cover.space{background:linear-gradient(140deg,#28205d,#080b20)}
+.cover.drift{background:linear-gradient(140deg,#683a85,#1b1b38)}
+.cover.bike{background:linear-gradient(140deg,#286b4b,#172a2d)}
+.tag{position:absolute;top:10px;left:10px;background:#00a66c;color:white;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:bold}
+.cardbody{padding:16px}
+.card h3{margin:0 0 8px}
+.card p{color:#aebed5;font-size:13px;min-height:34px;line-height:1.4}
+.play{width:100%;border:0;border-radius:8px;padding:12px;background:#168ac1;color:white;font-weight:bold;cursor:pointer}
+.play:hover{background:#27a9e5}
+#player{display:none;position:fixed;inset:0;background:#050812;z-index:10;flex-direction:column}
+.gamebar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#10182b;gap:10px}
+.gamebar button{background:#1e3858;color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+#gameTitle{font-weight:bold}
+#gameCanvas{display:block;width:100%;flex:1;min-height:0;background:#18283b}
+.hud{position:absolute;top:65px;left:15px;background:#07101dcc;padding:10px 14px;border-radius:10px;font-weight:bold;pointer-events:none}
+.controls{display:flex;justify-content:center;gap:18px;padding:12px;background:#10182b}
+.controls button{width:65px;height:48px;border:1px solid #476486;border-radius:12px;background:#1b304b;color:white;font-size:20px}
+#homeBtn{background:#263c59}
+footer{text-align:center;color:#778ba8;padding:35px;font-size:12px}
+.hidden{display:none!important}
+@media(max-width:600px){header{justify-content:center}.hero{padding:35px 5%}.cover{height:125px}}
 </style>
 </head>
 <body>
-
 <header>
-<h1>🚀 KRUG PRODUCTIONS BACKUP</h1>
-<p>YOUR NEXT LEVEL GAMING DESTINATION</p>
+ <div class="logo">KRUG <span>PRODUCTIONS</span></div>
+ <nav>
+  <button onclick="showHome()">HOME</button>
+  <button onclick="filterGames('All')">ALL GAMES</button>
+  <button onclick="filterGames('Racing')">RACING</button>
+  <button onclick="filterGames('Adventure')">ADVENTURE</button>
+ </nav>
 </header>
 
-<nav>
-<a href="#games">GAMES</a>
-<a href="#player">GAME PLAYER</a>
-</nav>
-
-<input class="search" id="search" placeholder="🔎 Search games..." oninput="filterGames()">
-
-<h2 style="padding-left:22px" id="games">⭐ 3D GAME LIBRARY</h2>
-
-<div class="games">
-<div class="card">
-<div class="art">🏎️</div>
-<div class="info">
-<h2>KRUG STREET RACER</h2>
-<p>Race through a realistic-looking 3D road environment.</p>
-<button class="play" onclick="startGame('race')">▶ PLAY</button>
-</div>
-</div>
-
-<div class="card">
-<div class="art">🏂</div>
-<div class="info">
-<h2>KRUG SNOW RIDER</h2>
-<p>Ride down a snowy mountain and dodge obstacles.</p>
-<button class="play" onclick="startGame('snow')">▶ PLAY</button>
-</div>
-</div>
-</div>
-
-<section id="player">
-<h2 id="gameTitle">KRUG GAME</h2>
-<div class="stats">
-<span>🏆 SCORE: <b id="score">0</b></span>
-<span>⭐ BEST: <b id="best">0</b></span>
-</div>
-<canvas id="game" width="900" height="520"></canvas>
-<p id="message">Press START to play!</p>
-<center>
-<button onclick="restart()">▶ START / RESTART</button>
-<button onclick="fullScreen()">⛶ FULLSCREEN</button>
-<button onclick="stopGame()">⬅ BACK</button>
-</center>
-<div class="controls">
-<button id="left">⬅️</button>
-<button id="right">➡️</button>
-</div>
-<center><small>Use arrow keys or the buttons to steer. Press SPACE to jump in Snow Rider.</small></center>
+<section class="hero">
+ <h1>KRUG <span>GAMING</span></h1>
+ <p>Find your next favorite game. Play. Explore. Compete.</p>
+ <input id="search" class="search" placeholder="🔎 Search games..." oninput="searchGames()">
 </section>
 
-<footer>© 2026 KRUG PRODUCTIONS BACKUP</footer>
+<main id="home">
+ <div class="sectiontop">
+  <h2>🎮 Game Library</h2>
+  <span id="gameCount" style="color:#9fb4d0">6 games</span>
+ </div>
+ <div class="filters">
+  <button class="active" onclick="filterGames('All',this)">All</button>
+  <button onclick="filterGames('Racing',this)">Racing</button>
+  <button onclick="filterGames('Adventure',this)">Adventure</button>
+  <button onclick="filterGames('Sports',this)">Sports</button>
+ </div>
+ <div class="games" id="games">
+  <article class="card" data-name="krug street racer" data-category="Racing">
+   <div class="cover race"><span class="tag">★ ORIGINAL</span>🏎️</div>
+   <div class="cardbody"><h3>KRUG STREET RACER</h3><p>Race through a scenic highway and dodge traffic.</p><button class="play" onclick="launch('race')">PLAY NOW</button></div>
+  </article>
+  <article class="card" data-name="krug snow rider" data-category="Sports">
+   <div class="cover snow"><span class="tag">★ ORIGINAL</span>🏂</div>
+   <div class="cardbody"><h3>KRUG SNOW RIDER</h3><p>Ride down snowy mountains, jump, and avoid obstacles.</p><button class="play" onclick="launch('snow')">PLAY NOW</button></div>
+  </article>
+  <article class="card" data-name="offroad rally" data-category="Racing">
+   <div class="cover off">🚙</div>
+   <div class="cardbody"><h3>OFFROAD RALLY</h3><p>Take on rugged trails and challenging terrain.</p><button class="play" onclick="launch('offroad')">PLAY NOW</button></div>
+  </article>
+  <article class="card" data-name="space pilot" data-category="Adventure">
+   <div class="cover space">🚀</div>
+   <div class="cardbody"><h3>SPACE PILOT</h3><p>Fly through space and dodge incoming asteroids.</p><button class="play" onclick="launch('space')">PLAY NOW</button></div>
+  </article>
+  <article class="card" data-name="drift arena" data-category="Racing">
+   <div class="cover drift">🏁</div>
+   <div class="cardbody"><h3>DRIFT ARENA</h3><p>Master corners and collect points on the track.</p><button class="play" onclick="launch('drift')">PLAY NOW</button></div>
+  </article>
+  <article class="card" data-name="mountain rush" data-category="Sports">
+   <div class="cover bike">🚵</div>
+   <div class="cardbody"><h3>MOUNTAIN RUSH</h3><p>Ride downhill through forests and rocky trails.</p><button class="play" onclick="launch('bike')">PLAY NOW</button></div>
+  </article>
+ </div>
+</main>
+
+<section id="player">
+ <div class="gamebar">
+  <button onclick="exitGame()" id="homeBtn">← HOME</button>
+  <span id="gameTitle">GAME</span>
+  <button onclick="toggleFull()">⛶ FULLSCREEN</button>
+ </div>
+ <div class="hud" id="hud">SCORE: 0</div>
+ <canvas id="gameCanvas"></canvas>
+ <div class="controls">
+  <button id="left">◀</button>
+  <button id="jump">⬆</button>
+  <button id="right">▶</button>
+ </div>
+</section>
+
+<footer>KRUG PRODUCTIONS BACKUP · YOUR GAME ZONE</footer>
 
 <script>
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
-const W=900,H=520;
-
-let mode="race",running=false,score=0,best={race:0,snow:0};
-let player=0,objects=[],frame=0,speed=5,jumping=0;
-let anim=null;
-
-function filterGames(){
- let q=document.getElementById("search").value.toLowerCase();
- document.querySelectorAll(".card").forEach(c=>{
-  c.style.display=c.innerText.toLowerCase().includes(q)?"":"none";
- });
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+let mode='race',running=false,score=0,player=0,objects=[],frame=0,jump=0,keys={},raf=0;
+const titles={race:'KRUG STREET RACER',snow:'KRUG SNOW RIDER',offroad:'OFFROAD RALLY',space:'SPACE PILOT',drift:'DRIFT ARENA',bike:'MOUNTAIN RUSH'};
+function resize(){let r=canvas.getBoundingClientRect();canvas.width=Math.max(320,r.width*devicePixelRatio);canvas.height=Math.max(250,r.height*devicePixelRatio);ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+window.addEventListener('resize',resize);
+function showHome(){exitGame();document.getElementById('home').scrollIntoView({behavior:'smooth'})}
+function filterGames(cat,btn){document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hidden',cat!=='All'&&c.dataset.category!==cat));countGames()}
+function countGames(){let n=[...document.querySelectorAll('.card')].filter(c=>!c.classList.contains('hidden')).length;document.getElementById('gameCount').textContent=n+' games'}
+function searchGames(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hidden',!c.dataset.name.includes(q)));countGames()}
+function launch(m){mode=m;document.getElementById('player').style.display='flex';document.getElementById('gameTitle').textContent=titles[m];score=0;player=0;objects=[];frame=0;jump=0;running=true;resize();cancelAnimationFrame(raf);loop()}
+function exitGame(){running=false;cancelAnimationFrame(raf);document.getElementById('player').style.display='none'}
+function toggleFull(){let p=document.getElementById('player');if(!document.fullscreenElement)p.requestFullscreen?.();else document.exitFullscreen?.()}
+function move(d){player=Math.max(-1,Math.min(1,player+d))}
+document.getElementById('left').onpointerdown=()=>move(-1);
+document.getElementById('right').onpointerdown=()=>move(1);
+document.getElementById('jump').onpointerdown=()=>{if(mode==='snow'||mode==='bike')jump=35};
+window.addEventListener('keydown',e=>{keys[e.key]=true;if(['ArrowLeft','ArrowRight','ArrowUp',' '].includes(e.key))e.preventDefault();if(!running)return;if(e.key==='ArrowLeft'||e.key==='a')move(-1);if(e.key==='ArrowRight'||e.key==='d')move(1);if(e.key===' '||e.key==='ArrowUp')jump=35});
+window.addEventListener('keyup',e=>keys[e.key]=false);
+function polygon(points,color){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(...points[0]);for(let p of points.slice(1))ctx.lineTo(...p);ctx.closePath();ctx.fill()}
+function sky(w,h,color1,color2){let g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,color1);g.addColorStop(1,color2);ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
+function mountain(x,y,s,c){polygon([[x-s,y],[x-s*.45,y-s*.7],[x,y-s*1.3],[x+s*.5,y-s*.65],[x+s,y]],c)}
+function car(x,y,s,color){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#080b12';ctx.fillRect(-27,-2,10,23);ctx.fillRect(17,-2,10,23);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(-24,0);ctx.lineTo(-19,-24);ctx.lineTo(-12,-37);ctx.lineTo(12,-37);ctx.lineTo(20,-20);ctx.lineTo(25,0);ctx.closePath();ctx.fill();ctx.fillStyle='#a9e7ff';ctx.fillRect(-12,-31,24,12);ctx.fillStyle='#fff';ctx.fillRect(-18,-4,7,5);ctx.fillRect(11,-4,7,5);ctx.restore()}
+function tree(x,y,s,snowy=false){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#493b2b';ctx.fillRect(-4,0,8,22);polygon([[-22,5],[0,-42],[22,5]],snowy?'#eaf7ff':'#1c6846');polygon([[-17,-10],[0,-52],[17,-10]],snowy?'#f7ffff':'#278453');ctx.restore()}
+function snowboard(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.rotate(-.18);ctx.fillStyle='#101b30';ctx.fillRect(-29,20,58,7);ctx.strokeStyle='#172b44';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-7,14);ctx.lineTo(-13,35);ctx.moveTo(7,14);ctx.lineTo(13,35);ctx.stroke();ctx.fillStyle='#ff8c35';ctx.fillRect(-13,-5,26,23);ctx.strokeStyle='#e9f5ff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-11,0);ctx.lineTo(-24,14);ctx.moveTo(11,0);ctx.lineTo(24,14);ctx.stroke();ctx.fillStyle='#f4c49b';ctx.beginPath();ctx.arc(0,-15,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#233b69';ctx.beginPath();ctx.arc(0,-19,10,Math.PI,0);ctx.fill();ctx.restore()}
+function loop(){if(!running)return;let w=canvas.clientWidth,h=canvas.clientHeight;frame++;score+=1;let horizon=h*.3;ctx.clearRect(0,0,w,h);
+if(mode==='space')drawSpace(w,h);
+else if(mode==='snow'||mode==='bike')drawSnow(w,h,horizon);
+else drawRoad(w,h,horizon);
+document.getElementById('hud').textContent='SCORE: '+score;
+raf=requestAnimationFrame(loop)}
+function drawRoad(w,h,hy){
+let off=mode==='offroad',dr=mode==='drift';
+sky(w,h,off?'#9bc6d2':'#77b7e9',off?'#6c7953':'#e1eaf4');
+mountain(w*.18,hy+35,100,'#718b9d');mountain(w*.72,hy+35,140,'#647d92');
+ctx.fillStyle=off?'#68714a':'#347447';ctx.fillRect(0,hy,w,h-hy);
+let bottom=w*.9,top=w*.12;
+polygon([[w/2-top/2,hy],[w/2+top/2,hy],[w/2+bottom/2,h],[w/2-bottom/2,h]],off?'#82755a':dr?'#343a47':'#303946');
+for(let i=0;i<18;i++){let z=((i/18+frame*.012)%1);let y=hy+(h-hy)*z*z;let x=w/2;let spread=top/2+(bottom/2-top/2)*z*z;ctx.fillStyle='#f4f2df';ctx.fillRect(x-spread*.05,y,spread*.1,Math.max(2,z*14));if(i%2===0){tree(w/2-spread*1.35,y,z*.8, false);tree(w/2+spread*1.35,y,z*.8,false)}}
+if(frame%48===0)objects.push({lane:Math.floor(Math.random()*3)-1,z:.05});
+objects.forEach(o=>o.z+=.008);objects=objects.filter(o=>o.z<1.15);
+objects.forEach(o=>car(w/2+o.lane*(top/3+(bottom/3-top/3)*o.z*o.z),hy+(h-hy)*o.z*o.z,.2+o.z*.9,'#e4a22b'));
+car(w/2+player*w*.18,h*.82,.9,'#26a9f4');
+if(objects.some(o=>o.z>.83&&o.z<.97&&Math.abs(o.lane-player)<.55)){score=Math.max(0,score-2)}
 }
-
-function startGame(type){
- mode=type;
- document.getElementById("player").style.display="block";
- document.getElementById("gameTitle").textContent=
- mode==="race"?"🏎️ KRUG STREET RACER":"🏂 KRUG SNOW RIDER";
- document.getElementById("player").scrollIntoView({behavior:"smooth"});
- restart();
+function drawSnow(w,h,hy){
+sky(w,h,'#4e85bd','#d9efff');
+for(let i=0;i<6;i++)mountain(w*(i/5),hy+100,100+i*10,i%2?'#e8f5ff':'#b9d8ef');
+polygon([[0,hy+40],[w*.2,hy+10],[w*.5,hy+55],[w*.8,hy+5],[w,hy+35],[w,h],[0,h]],'#f1f8ff');
+for(let i=0;i<15;i++){let z=((i/15+frame*.012)%1);let y=hy+(h-hy)*z*z;let spread=w*.12+w*.45*z*z;tree(w/2-spread*1.25,y,z*.9,true);tree(w/2+spread*1.25,y,z*.9,true)}
+if(frame%38===0)objects.push({lane:Math.floor(Math.random()*3)-1,z:.03});
+objects.forEach(o=>o.z+=.009);objects=objects.filter(o=>o.z<1.1);
+objects.forEach(o=>{let x=w/2+o.lane*w*.3*o.z,y=hy+(h-hy)*o.z*o.z,s=.2+o.z*.9;ctx.fillStyle='#6a7784';ctx.beginPath();ctx.arc(x,y,12*s,0,Math.PI*2);ctx.fill()});
+if(jump>0)jump--;
+snowboard(w/2+player*w*.2,h*.79-(jump>0?jump*2:0),.8);
 }
-
-function restart(){
- cancelAnimationFrame(anim);
- score=0;frame=0;player=0;objects=[];speed=5;jumping=0;
- running=true;
- document.getElementById("score").textContent="0";
- document.getElementById("message").textContent="GO! GO! GO!";
- loop();
-}
-
-function stopGame(){
- running=false;
- cancelAnimationFrame(anim);
- document.getElementById("player").style.display="none";
-}
-
-function fullScreen(){
- canvas.requestFullscreen?.();
-}
-
-function left(){if(running)player=Math.max(-1,player-.22)}
-function right(){if(running)player=Math.min(1,player+.22)}
-
-document.addEventListener("keydown",e=>{
- if(e.key==="ArrowLeft"){e.preventDefault();left()}
- if(e.key==="ArrowRight"){e.preventDefault();right()}
- if(e.code==="Space"&&mode==="snow"&&running&&jumping===0)jumping=35;
-});
-document.getElementById("left").addEventListener("pointerdown",e=>{e.preventDefault();left()});
-document.getElementById("right").addEventListener("pointerdown",e=>{e.preventDefault();right()});
-
-function poly(points,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.moveTo(points[0][0],points[0][1]);
- for(let p of points.slice(1))ctx.lineTo(p[0],p[1]);
- ctx.closePath();ctx.fill();
-}
-
-function perspective(z){
- return 1-z;
-}
-function center(z){
- return 450+player*95*z;
-}
-function scale(z){
- return .18+z*1.15;
-}
-
-function car(x,y,s,color){
- ctx.save();
- ctx.translate(x,y);
- ctx.scale(s,s);
- // Wheels
- ctx.fillStyle="#101116";
- ctx.fillRect(-35,-5,13,42);
- ctx.fillRect(22,-5,13,42);
- ctx.fillRect(-35,-53,13,35);
- ctx.fillRect(22,-53,13,35);
- // Body
- let g=ctx.createLinearGradient(-30,0,30,0);
- g.addColorStop(0,"#7a1025");
- g.addColorStop(.5,color);
- g.addColorStop(1,"#570d21");
- ctx.fillStyle=g;
- ctx.beginPath();
- ctx.moveTo(-29,45);ctx.lineTo(-25,-43);
- ctx.lineTo(-13,-65);ctx.lineTo(13,-65);
- ctx.lineTo(25,-43);ctx.lineTo(29,45);
- ctx.closePath();ctx.fill();
- // Glass
- ctx.fillStyle="#a7e3f7";
- ctx.beginPath();
- ctx.moveTo(-17,-25);ctx.lineTo(-12,-51);
- ctx.lineTo(12,-51);ctx.lineTo(17,-25);
- ctx.closePath();ctx.fill();
- ctx.fillStyle="#fff3b2";
- ctx.fillRect(-22,30,12,7);
- ctx.fillRect(10,30,12,7);
- ctx.restore();
-}
-
-function tree(x,y,s){
- ctx.save();ctx.translate(x,y);ctx.scale(s,s);
- ctx.fillStyle="#49321f";ctx.fillRect(-5,0,10,35);
- poly([[-28,10],[0,-75],[28,10]],"#145139");
- poly([[-22,-15],[0,-100],[22,-15]],"#1d7651");
- ctx.restore();
-}
-
-function rock(x,y,s){
- ctx.save();ctx.translate(x,y);ctx.scale(s,s);
- poly([[-22,12],[-16,-10],[0,-22],[20,-8],[27,12]],"#687785");
- ctx.restore();
-}
-
-function snowboarder(x,y,s){
- ctx.save();ctx.translate(x,y);ctx.scale(s,s);
- // Shadow and snowboard
- ctx.fillStyle="#a4d5e8";
- ctx.beginPath();ctx.ellipse(0,42,42,9,-.12,0,Math.PI*2);ctx.fill();
- ctx.save();ctx.rotate(-.12);
- let g=ctx.createLinearGradient(0,25,0,45);
- g.addColorStop(0,"#f8bd35");g.addColorStop(1,"#bb4a13");
- ctx.fillStyle=g;ctx.fillRect(-43,25,86,10);
- ctx.restore();
- // Body
- ctx.strokeStyle="#171d2c";ctx.lineWidth=9;ctx.lineCap="round";
- ctx.beginPath();ctx.moveTo(-5,5);ctx.lineTo(-20,28);
- ctx.moveTo(4,5);ctx.lineTo(20,27);
- ctx.stroke();
- // Jacket
- ctx.fillStyle="#e54b32";
- ctx.beginPath();ctx.ellipse(0,-8,18,27,.15,0,Math.PI*2);ctx.fill();
- // Arms
- ctx.strokeStyle="#e5a27b";ctx.lineWidth=8;
- ctx.beginPath();ctx.moveTo(-12,-15);ctx.lineTo(-36,-2);
- ctx.moveTo(12,-15);ctx.lineTo(35,-3);ctx.stroke();
- // Helmet
- ctx.fillStyle="#182c54";
- ctx.beginPath();ctx.arc(0,-39,17,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#a8e9ff";ctx.fillRect(5,-43,12,8);
- ctx.restore();
-}
-
-function drawRace(){
- let sky=ctx.createLinearGradient(0,0,0,260);
- sky.addColorStop(0,"#182d50");sky.addColorStop(1,"#8da9c3");
- ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-
- poly([[0,170],[240,105],[340,190],[0,300]],"#283c42");
- poly([[900,170],[650,110],[550,190],[900,300]],"#263d43");
-
- ctx.fillStyle="#35604a";ctx.fillRect(0,190,W,330);
-
- poly([[350,110],[550,110],[840,520],[60,520]],"#353b46");
- poly([[350,110],[550,110],[840,520],[60,520]],"#353b46");
-
- // Road borders
- ctx.strokeStyle="#e9e7df";ctx.lineWidth=9;
- ctx.beginPath();ctx.moveTo(350,110);ctx.lineTo(60,520);
- ctx.moveTo(550,110);ctx.lineTo(840,520);ctx.stroke();
-
- // Road markings
- for(let i=0;i<9;i++){
- let z=((i*0.14+frame*.009)%1);
- let y=110+410*z*z;
- let width=3+z*6;
- ctx.fillStyle="#f4f0cf";
- for(let n=-1;n<=1;n+=2){
-  ctx.fillRect(450+n*(20+z*160),y,width,12+z*35);
- }
- }
-
- // Trees
- for(let i=0;i<9;i++){
- let z=((i*.13+frame*.007)%1);
- let y=125+z*z*380;
- let s=.2+z*.85;
- tree(450-250*s,y,s);
- tree(450+250*s,y,s);
- }
-
- // Traffic
- objects.forEach(o=>{
- let z=o.z;
- let y=110+z*z*400;
- let x=450+o.lane*110*z;
- car(x,y,scale(z)*.7,"#d94b36");
- });
-
- car(450+player*150,440,1.05,"#278de7");
-}
-
-function drawSnow(){
- let sky=ctx.createLinearGradient(0,0,0,H);
- sky.addColorStop(0,"#4384b5");
- sky.addColorStop(.55,"#c6e7f8");
- sky.addColorStop(1,"#f1faff");
- ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-
- // Distant mountains
- poly([[0,210],[110,75],[210,185],[350,45],[480,200],[630,65],[790,190],[900,100],[900,350],[0,350]],"#e6f5ff");
- poly([[0,240],[190,130],[320,240],[500,120],[680,240],[820,130],[900,220],[900,400],[0,400]],"#9bc5df");
-
- // Snow slope
- poly([[350,130],[550,130],[900,520],[0,520]],"#e8f6ff");
- poly([[350,130],[550,130],[900,520],[0,520]],"#d5e9f4");
-
- // Shadows and track lines
- for(let i=0;i<12;i++){
- let z=((i*.1+frame*.007)%1);
- let y=130+z*z*390;
- let width=8+z*25;
- ctx.strokeStyle=i%2?"#c6deed":"#f8ffff";
- ctx.lineWidth=width;
- ctx.beginPath();
- ctx.moveTo(450-250*z,y);
- ctx.lineTo(450+250*z,y+10);
- ctx.stroke();
- }
-
- // Snowy trees and rocks
- objects.forEach(o=>{
- let z=o.z;
- let y=130+z*z*390;
- let x=450+o.lane*220*z;
- if(o.type==="tree"){
-  tree(x,y,scale(z)*.8);
-  // Snow on tree
-  ctx.fillStyle="white";
-  ctx.beginPath();ctx.arc(x-4*scale(z),y-45*scale(z),10*scale(z),0,Math.PI*2);ctx.fill();
- }else{
-  rock(x,y,scale(z)*1.1);
- }
- });
-
- // Snowboarder
- snowboarder(450+player*180,410-jumping*2,1.05);
-
- // Snow particles
- for(let i=0;i<30;i++){
- let x=(i*83+frame*2)%W;
- let y=(i*47+frame*3)%H;
- ctx.fillStyle="rgba(255,255,255,.8)";
- ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fill();
- }
-}
-
-function loop(){
- if(!running)return;
- frame++;
- score++;
- speed=5+Math.min(score/350,7);
- document.getElementById("score").textContent=score;
-
- if(score>best[mode]){
- best[mode]=score;
- document.getElementById("best").textContent=score;
- }
-
- if(frame%65===0){
- objects.push({
-  lane:(Math.floor(Math.random()*3)-1),
-  z:0,
-  type:mode==="snow"?(Math.random()>.5?"tree":"rock"):"car"
- });
- }
-
- objects.forEach(o=>o.z+=.012*speed/5);
- objects=objects.filter(o=>o.z<1.1);
-
- // Collision check
- for(let o of objects){
-  if(o.z>.84 && o.z<1.02 &&
-    Math.abs(o.lane-player*.8)<.24 &&
-    !(mode==="snow"&&jumping>12)){
-   running=false;
-   document.getElementById("message").textContent=
-    "💥 GAME OVER! Score: "+score+" — Press restart to try again!";
-  }
- }
-
- if(jumping>0)jumping--;
-
- ctx.clearRect(0,0,W,H);
- if(mode==="race")drawRace();else drawSnow();
-
- if(running)anim=requestAnimationFrame(loop);
-}
-
-function restart(){
- cancelAnimationFrame(anim);
- score=0;frame=0;player=0;objects=[];speed=5;jumping=0;
- running=true;
- document.getElementById("score").textContent="0";
- document.getElementById("best").textContent=best[mode];
- document.getElementById("message").textContent=
- "GO! Use arrow keys to dodge obstacles!";
- loop();
+function drawSpace(w,h){
+sky(w,h,'#07091e','#17133d');
+for(let i=0;i<90;i++){let x=(i*137)%w,y=(i*83+frame*1.3)%h;ctx.fillStyle='#d9edff';ctx.fillRect(x,y,2,2)}
+ctx.fillStyle='#8a68d9';ctx.beginPath();ctx.arc(w*.76,h*.25,Math.min(w,h)*.12,0,Math.PI*2);ctx.fill();
+if(frame%35===0)objects.push({lane:Math.floor(Math.random()*3)-1,z:0});
+objects.forEach(o=>o.z+=.012);objects=objects.filter(o=>o.z<1.2);
+objects.forEach(o=>{let x=w/2+o.lane*w*.35*o.z,y=h*.2+(h*.65)*o.z;ctx.fillStyle='#b7a8a0';ctx.beginPath();ctx.arc(x,y,5+o.z*25,0,Math.PI*2);ctx.fill()});
+let x=w/2+player*w*.22,y=h*.78;
+ctx.fillStyle='#dcecff';ctx.beginPath();ctx.moveTo(x,y-30);ctx.lineTo(x-22,y+25);ctx.lineTo(x,y+14);ctx.lineTo(x+22,y+25);ctx.closePath();ctx.fill();
+ctx.fillStyle='#ff9b42';ctx.beginPath();ctx.moveTo(x-8,y+20);ctx.lineTo(x,y+48+Math.random()*10);ctx.lineTo(x+8,y+20);ctx.fill();
 }
 </script>
 </body>
