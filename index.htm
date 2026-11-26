@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRUG 3D GAME WORLD</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:white;font-family:Arial;overflow:hidden}
+#menu{position:fixed;inset:0;z-index:5;overflow:auto;text-align:center;
+background:radial-gradient(circle at top,#244d70,#080d18 65%);padding:25px}
+h1{font-size:clamp(35px,7vw,75px);margin:20px 0 5px;
+text-shadow:0 0 25px #00c8ff}
+.subtitle{color:#b6d9ed;margin-bottom:25px}
+.games{max-width:1050px;margin:auto;display:grid;
+grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.game{padding:24px 12px;background:linear-gradient(145deg,#1a3551,#101a2a);
+border:1px solid #39718e;border-radius:15px;cursor:pointer;
+transition:.2s;font-size:18px;color:white}
+.game:hover{transform:translateY(-5px);background:#205b79;
+box-shadow:0 0 20px #00aaff}
+.game span{display:block;font-size:38px;margin-bottom:10px}
+#hud{position:fixed;top:12px;left:12px;z-index:3;
+background:#071526cc;padding:14px;border-radius:10px;display:none}
+#controls{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+z-index:3;background:#071526cc;padding:10px 18px;border-radius:10px;
+font-size:13px;display:none;text-align:center}
+#back{position:fixed;right:15px;top:15px;z-index:4;
+display:none;padding:12px 18px;background:#126b91;color:white;
+border:0;border-radius:9px;cursor:pointer}
+#message{position:fixed;top:45%;width:100%;text-align:center;
+font-size:30px;pointer-events:none;text-shadow:0 2px 10px black}
+</style>
+</head>
+<body>
+
+<div id="menu">
+<h1>KRUG 3D</h1>
+<div class="subtitle">ULTIMATE GAME WORLD • 3D • 10 GAME MODES</div>
+<div class="games" id="games"></div>
+<p style="color:#8faac0;margin-top:25px">Built for the KRUG gaming universe</p>
+</div>
+
+<div id="hud">SCORE: <b id="score">0</b><br>
+MODE: <b id="mode">READY</b></div>
+<div id="controls">WASD = Move / Drive | SPACE = Jump | Mouse = Look | SHIFT = Boost</div>
+<button id="back" onclick="goMenu()">EXIT GAME</button>
+<div id="message"></div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from "three";
+
+const modes=[
+["🏎️","STUNT JUMP","Launch off massive ramps!", "stunt"],
+["🏁","3D RACING","Race through the track!", "racing"],
+["🟩","PLATFORMER","Jump across platforms!", "platform"],
+["🎯","SHOOTER","Hit the floating targets!", "shooter"],
+["🧩","PUZZLE","Collect the glowing crystals!", "puzzle"],
+["⚔️","ACTION","Explore and collect points!", "action"],
+["🌎","ADVENTURE","Explore a giant world!", "adventure"],
+["⚽","SPORTS","Kick the ball into the goal!", "sports"],
+["🥊","FIGHTING","Battle the training bots!", "fighting"],
+["👻","HORROR","Explore the spooky forest!", "horror"]
+];
+
+const gameGrid=document.getElementById("games");
+modes.forEach(m=>{
+const b=document.createElement("button");
+b.className="game";
+b.innerHTML=`<span>${m[0]}</span><b>${m[1]}</b><p>${m[2]}</p>`;
+b.onclick=()=>startGame(m[3]);
+gameGrid.appendChild(b);
+});
+
+let scene,camera,renderer,clock;
+let running=false,mode="racing",score=0;
+let player,ground,objects=[],targets=[],keys={};
+let velocityY=0,onGround=false;
+let carSpeed=0,carYaw=0;
+let mouseX=0,mouseY=0,gameTime=0;
+
+const mat=(color,roughness=.7,metalness=0)=>
+new THREE.MeshStandardMaterial({color,roughness,metalness});
+
+function box(x,y,z,sx,sy,sz,material){
+const obj=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),material);
+obj.position.set(x,y,z);
+obj.castShadow=true;obj.receiveShadow=true;
+scene.add(obj);objects.push(obj);return obj;
+}
+function sphere(x,y,z,r,material){
+const obj=new THREE.Mesh(new THREE.SphereGeometry(r,24,16),material);
+obj.position.set(x,y,z);obj.castShadow=true;scene.add(obj);
+objects.push(obj);return obj;
+}
+function addTarget(x,y,z,color=0xffcf40){
+let t=sphere(x,y,z,.65,mat(color,.3,.2));
+t.userData.target=true;targets.push(t);
+}
+function scoreUp(n=10){
+score+=n;document.getElementById("score").textContent=score;
+}
+function clearWorld(){
+objects.forEach(o=>scene.remove(o));
+objects=[];targets=[];
+}
+
+function makeCar(){
+const car=new THREE.Group();
+const body=new THREE.Mesh(
+new THREE.BoxGeometry(2,0.65,4),
+mat(0x087ff0,.25,.6));
+body.position.y=.65;body.castShadow=true;car.add(body);
+const top=new THREE.Mesh(
+new THREE.BoxGeometry(1.5,.7,1.8),
+mat(0x132d49,.15,.4));
+top.position.set(0,1.2,-.2);car.add(top);
+for(const x of [-1,1])for(const z of [-1.35,1.35]){
+const w=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.3,20),
+mat(0x111111));
+w.rotation.z=Math.PI/2;w.position.set(x,.45,z);car.add(w);
+}
+scene.add(car);objects.push(car);return car;
+}
+
+function startGame(selected){
+mode=selected;score=0;gameTime=0;carSpeed=0;carYaw=0;
+velocityY=0;mouseX=0;mouseY=0;
+document.getElementById("score").textContent="0";
+document.getElementById("mode").textContent=mode.toUpperCase();
+document.getElementById("menu").style.display="none";
+document.getElementById("hud").style.display="block";
+document.getElementById("controls").style.display="block";
+document.getElementById("back").style.display="block";
+document.getElementById("message").textContent="";
+
+if(renderer){renderer.dispose();renderer.domElement.remove();}
+scene=new THREE.Scene();
+scene.background=new THREE.Color(mode==="horror"?0x101525:0x8bbde0);
+scene.fog=new THREE.Fog(mode==="horror"?0x101525:0x8bbde0,35,150);
+camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,500);
+renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.2;
+document.body.appendChild(renderer.domElement);
+
+const sky=new THREE.HemisphereLight(0xd5eaff,0x45533a,2);
+scene.add(sky);
+const sun=new THREE.DirectionalLight(0xfff0d5,3);
+sun.position.set(-20,35,15);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);scene.add(sun);
+
+clearWorld();
+let groundColor=mode==="horror"?0x19231e:0x385c3a;
+ground=box(0,-.6,0,180,1,180,mat(groundColor));
+
+if(mode==="racing"||mode==="stunt"){
+ground.material=mat(0x30363d);
+for(let z=-75;z<75;z+=12){
+box(0,-.04,z,12,.08,2,mat(0xf3f0dd));
+}
+for(let x of [-7,7]){
+box(x,.2,0,1,.4,180,mat(0xeeeeee));
+}
+for(let i=0;i<6;i++){
+box((i%2? -5:5),2+i*1.2,-25-i*10,
+5,1,8,mat(0x1688c0));
+}
+if(mode==="stunt"){
+const ramp=box(0,1,-20,12,2,12,mat(0x1989bb));
+ramp.rotation.x=-.28;
+}
+player=makeCar();
+player.position.set(0,0,15);
+}else{
+player=new THREE.Group();
+let torso=new THREE.Mesh(new THREE.BoxGeometry(.8,1.4,.6),mat(0x1976d2));
+torso.position.y=1;torso.castShadow=true;player.add(torso);
+let head=new THREE.Mesh(new THREE.SphereGeometry(.35,20,16),mat(0xffc89a));
+head.position.y=2;player.add(head);
+scene.add(player);objects.push(player);
+player.position.set(0,0,8);
+}
+
+if(mode==="platform"){
+for(let i=0;i<15;i++){
+box((i%3-1)*7,i*.45,-i*8,5,.8,5,mat(0x2997a8));
+}
+}
+if(mode==="puzzle"){
+for(let i=0;i<8;i++)addTarget((i%4-2)*5,1,-i*7,0x24eaff);
+}
+if(mode==="shooter"){
+for(let i=0;i<12;i++)addTarget((i%4-2)*5,2+(i%3)*2,-i*8,0xff5544);
+}
+if(mode==="sports"){
+box(0,1,-40,24,3,1,mat(0xffffff));
+sphere(0,1,0,.8,mat(0xffffff));
+for(let i=0;i<6;i++)addTarget((i-3)*3,1,-25,0xffcc00);
+}
+if(mode==="fighting"){
+for(let i=0;i<4;i++){
+let bot=box((i-2)*5,1,-12,1.5,2,1.5,mat(0xd64c45));
+bot.userData.bot=true;targets.push(bot);
+}
+}
+if(mode==="horror"){
+scene.background=new THREE.Color(0x090d16);
+for(let i=0;i<45;i++){
+let x=(Math.random()-.5)*100,z=(Math.random()-.5)*100;
+let trunk=box(x,3,z,1,6,1,mat(0x30231c));
+sphere(x,7,z,3,mat(0x14291b));
+}
+for(let i=0;i<3;i++){
+let monster=box((i-1)*9,1,-25-i*15,1.5,2,1.5,mat(0x9a2525));
+monster.userData.monster=true;
+targets.push(monster);
+}
+}
+if(mode==="adventure"||mode==="action"){
+for(let i=0;i<35;i++){
+let x=(Math.random()-.5)*100,z=-Math.random()*100;
+box(x,1,z,.8,2,.8,mat(0x775333));
+sphere(x,3,z,2.2,mat(0x236b38));
+}
+for(let i=0;i<10;i++)addTarget((Math.random()-.5)*40,1,-i*10,0xffdf43);
+}
+
+clock=new THREE.Clock();running=true;animate();
+}
+
+function goMenu(){
+running=false;
+if(renderer){renderer.dispose();renderer.domElement.remove();}
+document.getElementById("menu").style.display="block";
+document.getElementById("hud").style.display="none";
+document.getElementById("controls").style.display="none";
+document.getElementById("back").style.display="none";
+document.getElementById("message").textContent="";
+}
+
+window.goMenu=goMenu;
+window.addEventListener("keydown",e=>{
+keys[e.code]=true;
+if(e.code==="Space")e.preventDefault();
+});
+window.addEventListener("keyup",e=>keys[e.code]=false);
+window.addEventListener("mousemove",e=>{
+if(document.pointerLockElement)mouseX+=e.movementX*.002;
+});
+window.addEventListener("click",()=>{
+if(running&&renderer&&mode!=="racing"&&mode!=="stunt")
+renderer.domElement.requestPointerLock?.();
+});
+window.addEventListener("resize",()=>{
+if(camera&&renderer){
+camera.aspect=innerWidth/innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(innerWidth,innerHeight);
+}
+});
+
+function animate(){
+if(!running)return;
+requestAnimationFrame(animate);
+const dt=Math.min(clock.getDelta(),.04);
+gameTime+=dt;
+
+let forward=Number(keys.KeyW||keys.ArrowUp)-Number(keys.KeyS||keys.ArrowDown);
+let side=Number(keys.KeyD||keys.ArrowRight)-Number(keys.KeyA||keys.ArrowLeft);
+const boost=keys.ShiftLeft||keys.ShiftRight;
+
+if(mode==="racing"||mode==="stunt"){
+carSpeed+=forward*dt*(boost?28:18);
+carSpeed*=Math.pow(.985,dt*60);
+carSpeed=THREE.MathUtils.clamp(carSpeed,-15,boost?55:35);
+carYaw-=side*dt*(.8+Math.abs(carSpeed)*.025);
+player.rotation.y=carYaw;
+player.position.x-=Math.sin(carYaw)*carSpeed*dt;
+player.position.z-=Math.cos(carYaw)*carSpeed*dt;
+if(mode==="stunt"&&player.position.z<-20){
+velocityY+=9*dt;
+player.position.y+=velocityY*dt;
+}
+if(player.position.y>0&&player.position.z>-20){
+player.position.y=Math.max(0,player.position.y-15*dt);
+velocityY=0;
+}
+}else{
+let speed=boost?15:8;
+let dx=side*dt*speed,dz=-forward*dt*speed;
+player.position.x+=dx*Math.cos(mouseX)+dz*Math.sin(mouseX);
+player.position.z+=dz*Math.cos(mouseX)-dx*Math.sin(mouseX);
+player.rotation.y=mouseX;
+if(keys.Space&&onGround){velocityY=9;onGround=false;}
+velocityY-=22*dt;
+player.position.y+=velocityY*dt;
+if(player.position.y<=0){player.position.y=0;velocityY=0;onGround=true;}
+}
+
+if(mode==="horror"){
+targets.forEach(t=>{
+if(t.userData.monster){
+t.position.x+=(player.position.x-t.position.x)*dt*.12;
+t.position.z+=(player.position.z-t.position.z)*dt*.12;
+if(t.position.distanceTo(player.position)<2.5){
+document.getElementById("message").textContent="THE FOREST FOUND YOU!";
+}
+}
+});
+}
+
+if(mode==="fighting"){
+targets.forEach(t=>{
+if(t.userData.bot&&t.position.distanceTo(player.position)<5&&keys.KeyF){
+t.position.z-=.3;scoreUp(1);
+}
+});
+}
+
+if(mode==="shooter"&&keys.KeyF){
+const target=targets.find(t=>t.userData.target&&t.position.distanceTo(player.position)<20);
+if(target){scene.remove(target);targets=targets.filter(t=>t!==target);scoreUp(10);}
+}
+if(mode==="puzzle"||mode==="action"||mode==="adventure"){
+targets.forEach(t=>{
+if(t.userData.target&&t.position.distanceTo(player.position)<2){
+scene.remove(t);t.userData.target=false;scoreUp(10);
+}
+});
+}
+if(mode==="sports"&&keys.KeyF){
+targets.forEach(t=>{
+if(t.userData.target&&t.position.distanceTo(player.position)<5){
+scene.remove(t);t.userData.target=false;scoreUp(5);
+}
+});
+}
+
+if(mode==="platform"&&player.position.y<-12){
+player.position.set(0,0,8);velocityY=0;
+}
+if(player.position.x>85)player.position.x=85;
+if(player.position.x<-85)player.position.x=-85;
+if(player.position.z>85)player.position.z=85;
+if(player.position.z<-85)player.position.z=-85;
+
+const cameraOffset=new THREE.Vector3(
+mode==="racing"||mode==="stunt"?0:0,
+mode==="racing"||mode==="stunt"?5:5,
+mode==="racing"||mode==="stunt"?10:9
+);
+cameraOffset.applyAxisAngle(new THREE.Vector3(0,1,0),player.rotation.y);
+camera.position.lerp(player.position.clone().add(cameraOffset),.12);
+camera.lookAt(player.position.x,player.position.y+1,player.position.z-3);
+
+renderer.render(scene,camera);
+}
+</script>
+</body>
+</html>
