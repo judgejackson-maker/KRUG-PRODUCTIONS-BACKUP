@@ -1,523 +1,167 @@
+from pathlib import Path
+import zipfile, textwrap
 
-<!DOCTYPE html>
+out = Path("/mnt/data/backup_website")
+out.mkdir(exist_ok=True)
+html = r'''<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KRUG PRODUCTIONS BACKUP 6.0</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BACKUP — 3D Arcade</title>
+<meta name="description" content="BACKUP 3D Arcade — play original browser games.">
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080e1a;color:#f5f8ff;font-family:Arial,sans-serif}
-header{padding:22px 5%;background:#09111f;border-bottom:1px solid #263b59}
-.brand{font-size:clamp(25px,4vw,40px);font-weight:1000;letter-spacing:2px;background:linear-gradient(90deg,#fff,#32caff,#a67aff);background-clip:text;color:transparent}
-.sub{font-size:11px;letter-spacing:4px;color:#8da3c0;margin-top:5px}
-main{max-width:1400px;margin:auto;padding:24px 4%}
-.hero{padding:35px 25px;border-radius:20px;background:linear-gradient(120deg,#153958,#172342,#292047);border:1px solid #315071;margin-bottom:22px}
-.hero h1{font-size:clamp(28px,5vw,46px);margin:10px 0}
-.hero p{color:#bfd0e4;line-height:1.6;max-width:700px}
-.tag{display:inline-block;background:#26c7ff;color:#061321;border-radius:20px;padding:7px 12px;font-size:11px;font-weight:bold}
-button,input{font:inherit}
-button{border:0;border-radius:9px;padding:11px 15px;background:linear-gradient(100deg,#1688c8,#7555d7);color:white;font-weight:bold;cursor:pointer}
-button:hover{filter:brightness(1.17)}
-.secondary{background:#233651;border:1px solid #3c5575}
-.tools{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
-input{background:#111e32;color:white;border:1px solid #344d6e;border-radius:9px;padding:12px;min-width:180px;flex:1}
-h2{font-size:21px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px}
-.card{background:linear-gradient(145deg,#17253b,#0e1728);border:1px solid #2a405e;border-radius:15px;overflow:hidden;cursor:pointer}
-.card:hover{border-color:#26c7ff;transform:translateY(-3px)}
-.cover{height:125px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,#17456a,#252049)}
-.info{padding:13px}
-.info h3{margin:0 0 7px;font-size:16px}
-.info p{margin:0;color:#9fb0c7;font-size:12px;line-height:1.5}
-#gameScreen{display:none}
-.gamebar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
-.stats{display:flex;gap:8px;flex-wrap:wrap}
-.stat{background:#17253b;border:1px solid #334b6a;padding:9px 12px;border-radius:9px;font-size:12px}
-.stat b{color:#55d9ff}
-.stage{position:relative;background:#050a12;border:1px solid #304969;border-radius:14px;overflow:hidden;margin-top:14px}
-#gameCanvas{display:block;width:100%;height:auto;touch-action:none}
-.overlay{position:absolute;inset:0;background:#07101ddd;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
-.overlaybox{max-width:450px}
-.overlaybox h2{font-size:34px;margin:0 0 10px}
-.overlaybox p{line-height:1.6;color:#c1d0e3}
-.controls{color:#9cb1ca;font-size:12px;text-align:center;margin:12px}
-#roomPanel{background:#111e32;border:1px solid #334b6a;border-radius:12px;padding:15px;margin:15px 0}
-#roomPanel input{max-width:260px}
-#roomStatus{font-size:12px;color:#9fb4ce;margin-top:9px}
-.mobile{display:none;justify-content:center;gap:9px;margin:12px}
-.mobile button{min-width:55px;font-size:20px}
-footer{text-align:center;color:#7185a0;padding:30px;font-size:12px}
-@media(max-width:650px){.mobile{display:flex}.cover{height:95px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.info{padding:10px}.info h3{font-size:13px}}
+:root{--bg:#080d18;--panel:#101a2b;--panel2:#15243a;--cyan:#5ee7ff;--blue:#638bff;--text:#edf5ff;--muted:#9eb0c9;--line:#263750}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -20%,#1b3761 0%,#0b1425 48%,#070b13 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer;border:0;color:#07111e;background:linear-gradient(135deg,var(--cyan),#8bb8ff);font-weight:800;padding:11px 16px;border-radius:12px;box-shadow:0 8px 25px #4acfff22;transition:.18s}button:hover{transform:translateY(-2px);filter:brightness(1.08)}button.secondary{background:#1a2a42;color:var(--text);border:1px solid #304866;box-shadow:none}button.ghost{background:transparent;border:1px solid #39516e;color:#d9eaff;box-shadow:none}
+header{position:sticky;top:0;z-index:5;backdrop-filter:blur(18px);background:#080f1ddd;border-bottom:1px solid #23344d;padding:14px clamp(16px,4vw,52px);display:flex;align-items:center;gap:20px}
+.logo{font-size:25px;font-weight:1000;letter-spacing:3px;background:linear-gradient(90deg,#fff,var(--cyan),#8b9cff);color:transparent;background-clip:text}.tag{font-size:11px;color:#8fa9c9;letter-spacing:2px;font-weight:800}
+nav{display:flex;gap:8px;margin-left:auto}nav button{background:transparent;color:#a9bad2;box-shadow:none;padding:9px 12px}nav button.active{background:#172943;color:white;border:1px solid #355274}
+main{max-width:1420px;margin:auto;padding:26px clamp(14px,3vw,42px) 70px}
+.hero{position:relative;overflow:hidden;border:1px solid #385578;border-radius:26px;min-height:310px;padding:clamp(24px,5vw,58px);background:linear-gradient(110deg,#102747ee 0%,#10213aee 48%,#10192cbb 100%),radial-gradient(circle at 80% 20%,#55dfff 0%,transparent 40%);box-shadow:0 25px 80px #0008}
+.hero:after{content:"";position:absolute;width:390px;height:390px;border-radius:50%;right:7%;top:-80px;background:radial-gradient(circle at 35% 30%,#e5faff,#5acbff 18%,#3763aa 42%,#101c39 70%);filter:drop-shadow(0 0 55px #49caff66);opacity:.65}
+.hero>*{position:relative;z-index:1}.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:3px}.hero h1{font-size:clamp(42px,7vw,76px);line-height:.95;margin:15px 0;letter-spacing:-3px}.hero p{color:#c0d0e5;max-width:510px;line-height:1.6}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:34px 0 16px}.section-head h2{margin:0;font-size:23px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.search{width:min(340px,100%);background:#0e192a;border:1px solid #2b405c;border-radius:12px;color:white;padding:12px 14px;outline:none}.search:focus{border-color:var(--cyan)}
+.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.game-card{overflow:hidden;border:1px solid #263c58;border-radius:18px;background:linear-gradient(145deg,#14243a,#0d1727);transition:.2s;min-width:0}.game-card:hover{transform:translateY(-4px);border-color:#5b9ac2;box-shadow:0 18px 35px #0005}.art{height:150px;position:relative;overflow:hidden;background:linear-gradient(145deg,#163d62,#09162b)}.art canvas{width:100%;height:100%;display:block}.art .art-label{position:absolute;left:15px;top:13px;background:#07111dcc;border:1px solid #ffffff33;border-radius:8px;padding:6px 9px;font-size:10px;letter-spacing:1px;font-weight:900}.card-info{padding:16px}.card-info h3{margin:0 0 6px}.card-info p{color:var(--muted);font-size:13px;line-height:1.5;min-height:39px;margin:0 0 14px}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.pill{font-size:10px;color:#a8dfff;background:#17304b;padding:6px 8px;border-radius:20px;font-weight:800}
+.notice{margin-top:26px;padding:15px 17px;border-radius:14px;background:#101e31;border:1px solid #2b4260;color:#aebfd5;font-size:12px;line-height:1.6}
+#playView{display:none}.game-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}.game-top h2{margin:0}.stage{position:relative;height:min(68vh,650px);min-height:380px;background:#07101e;border:1px solid #304967;border-radius:20px;overflow:hidden;box-shadow:0 22px 70px #0008}.stage canvas{display:block;width:100%;height:100%}.hud{position:absolute;inset:14px 14px auto;display:flex;justify-content:space-between;pointer-events:none;gap:10px}.hud-box{background:#07111dcc;border:1px solid #ffffff2c;padding:9px 12px;border-radius:12px;font-weight:900;backdrop-filter:blur(10px)}.hud small{display:block;color:#a8bfd8;font-size:9px;letter-spacing:1px}.game-message{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#081425df;border:1px solid #7bcaff88;padding:22px 28px;border-radius:18px;text-align:center;min-width:230px;backdrop-filter:blur(14px)}.game-message h2{margin:0 0 7px}.game-message p{color:#b7c9df;font-size:13px}.controls{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:13px;color:#9fb2cb;font-size:12px}.control-pills{display:flex;gap:7px;flex-wrap:wrap}.control-pills span{background:#13233a;border:1px solid #293f5d;padding:7px 10px;border-radius:8px}
+#multiplayer{display:none;margin-top:28px}.multi-panel{background:#101c2e;border:1px solid #2b4260;border-radius:18px;padding:20px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}.multi-panel p{color:var(--muted);font-size:13px;max-width:560px;line-height:1.5}.multi-actions{display:flex;gap:8px;flex-wrap:wrap}.multi-actions input{width:180px;background:#091322;color:white;border:1px solid #344b69;border-radius:10px;padding:10px}.status{font-size:12px;color:#9fe5ff;margin-top:9px}
+footer{border-top:1px solid #1f3047;padding:24px;text-align:center;color:#7186a3;font-size:11px}
+@media(max-width:850px){.games{grid-template-columns:repeat(2,minmax(0,1fr))}.hero:after{right:-130px;opacity:.35}}
+@media(max-width:560px){header{gap:10px}.tag{display:none}nav button{padding:8px;font-size:12px}.games{grid-template-columns:1fr}.hero{min-height:290px}.hero:after{right:-220px}.stage{min-height:330px;height:55vh}.section-head{align-items:start;flex-direction:column}}
 </style>
 </head>
 <body>
-<header>
- <div class="brand">KRUG PRODUCTIONS</div>
- <div class="sub">BACKUP GAMING NETWORK • VERSION 6.0</div>
-</header>
+<header><div><div class="logo">BACKUP</div><div class="tag">3D ARCADE • PLAY BEYOND</div></div><nav><button class="active" id="homeTab">HOME</button><button id="multiTab">MULTIPLAYER</button></nav></header>
 <main>
-<section id="home">
- <div class="hero">
-  <span class="tag">VERSION 6.0 • 3D GAME EDITION</span>
-  <h1>WELCOME TO KRUG BACKUP.</h1>
-  <p>Explore 3D worlds, race through different environments, and challenge your friends. Snow Rider X is the featured game.</p>
-  <button onclick="openGame('snow')">🏂 PLAY SNOW RIDER X</button>
- </div>
- <div class="tools">
-  <input id="search" placeholder="🔎 Search games..." oninput="renderGames()">
-  <button class="secondary" onclick="renderGames()">Show all games</button>
- </div>
- <h2>🔥 GAME LIBRARY</h2>
- <div class="grid" id="games"></div>
+<section id="homeView">
+<div class="hero"><div class="eyebrow">THE NEXT LEVEL STARTS HERE</div><h1>PLAY BIG.<br>GO 3D.</h1><p>A fresh arcade packed with original 3D browser games, snowy mountains, high-speed tracks, and new challenges. Pick a game and jump in.</p><div class="hero-actions"><button id="featuredPlay">▶ PLAY SNOW RIDER</button><button class="secondary" id="browseGames">EXPLORE GAMES</button></div></div>
+<div class="section-head"><div><h2>Featured game ❄️</h2><p>Big mountains. Fast runs. Don't wipe out.</p></div><span class="pill">FEATURED • 3D</span></div>
+<div class="games" id="gameGrid">
+<article class="game-card" data-game="snow"><div class="art"><canvas id="artSnow"></canvas><span class="art-label">FEATURED</span></div><div class="card-info"><h3>Snow Rider 3D</h3><p>Race down an endless mountain, dodge trees, leap over ramps, and chase your best distance.</p><div class="card-bottom"><span class="pill">SNOW • PHYSICS</span><button data-launch="snow">PLAY NOW</button></div></div></article>
+<article class="game-card" data-game="drift"><div class="art"><canvas id="artDrift"></canvas></div><div class="card-info"><h3>Neon Drift 3D</h3><p>Slide through a glowing night circuit and keep your car on the track.</p><div class="card-bottom"><span class="pill">RACING • 3D</span><button data-launch="drift">PLAY</button></div></div></article>
+<article class="game-card" data-game="sky"><div class="art"><canvas id="artSky"></canvas></div><div class="card-info"><h3>Skyline Runner</h3><p>Jump between floating platforms, avoid hazards, and reach the finish beacon.</p><div class="card-bottom"><span class="pill">PARKOUR • 3D</span><button data-launch="sky">PLAY</button></div></div></article>
+<article class="game-card" data-game="orbit"><div class="art"><canvas id="artOrbit"></canvas></div><div class="card-info"><h3>Orbit Breaker</h3><p>Steer a tiny spacecraft through an asteroid field and collect glowing energy.</p><div class="card-bottom"><span class="pill">SPACE • 3D</span><button data-launch="orbit">PLAY</button></div></div></article>
+<article class="game-card" data-game="boulder"><div class="art"><canvas id="artBoulder"></canvas></div><div class="card-info"><h3>Boulder Run</h3><p>Dash through a canyon as giant rolling boulders close in behind you.</p><div class="card-bottom"><span class="pill">SURVIVAL • 3D</span><button data-launch="boulder">PLAY</button></div></div></article>
+<article class="game-card" data-game="wave"><div class="art"><canvas id="artWave"></canvas></div><div class="card-info"><h3>Wave Racer</h3><p>Skim across a blue-water course and weave around floating buoys.</p><div class="card-bottom"><span class="pill">WATER • 3D</span><button data-launch="wave">PLAY</button></div></div></article>
+</div>
+<div class="notice">BACKUP is an original browser-game project. It does not copy Classroom 6x or bundle third-party games. The games above are playable demos built into this page. Online multiplayer uses a peer-to-peer connection and requires an internet connection; school or network restrictions may still prevent connections.</div>
 </section>
-
-<section id="gameScreen">
- <div class="gamebar">
-  <div><h2 id="gameTitle">Snow Rider X</h2><div id="gameDescription" style="color:#9fb1c9;font-size:12px"></div></div>
-  <div class="stats">
-   <div class="stat">DISTANCE: <b id="distance">0</b> m</div>
-   <div class="stat">SCORE: <b id="score">0</b></div>
-   <div class="stat">BEST: <b id="best">0</b></div>
-  </div>
- </div>
-
- <div class="stage">
-  <canvas id="gameCanvas" width="1100" height="620"></canvas>
-  <div class="overlay" id="overlay">
-   <div class="overlaybox">
-    <h2 id="overlayTitle">SNOW RIDER X</h2>
-    <p id="overlayText">Ride down the mountain, avoid obstacles, collect distance, and try to beat your best score.</p>
-    <button id="overlayButton" onclick="startGame()">▶ START GAME</button>
-   </div>
-  </div>
- </div>
-
- <div class="controls">WASD / Arrow Keys to steer • SPACE to jump • P to pause • Avoid trees and rocks!</div>
- <div class="mobile">
-  <button class="secondary" onpointerdown="press('ArrowLeft')" onpointerup="release('ArrowLeft')" onpointerleave="release('ArrowLeft')">◀</button>
-  <button class="secondary" onpointerdown="press('ArrowRight')" onpointerup="release('ArrowRight')" onpointerleave="release('ArrowRight')">▶</button>
-  <button onpointerdown="press(' ')" onpointerup="release(' ')" onpointerleave="release(' ')">JUMP</button>
- </div>
-
- <div id="roomPanel">
-  <b>🌐 MULTIPLAYER ROOMS</b>
-  <p style="font-size:12px;color:#aebfd5">Create a room and share its room code with a friend. Your friend enters the code to join.</p>
-  <div class="tools">
-   <button onclick="createRoom()">Create room</button>
-   <input id="roomCode" placeholder="Enter friend's room code">
-   <button onclick="joinRoom()">Join room</button>
-  </div>
-  <div id="roomStatus">Not connected to a multiplayer room.</div>
- </div>
-
- <div class="tools">
-  <button class="secondary" onclick="pauseGame()">⏸ Pause</button>
-  <button class="secondary" onclick="retryGame()">↻ Retry</button>
-  <button class="secondary" onclick="fullScreen()">⛶ Fullscreen</button>
-  <button onclick="goHome()">⌂ Home</button>
- </div>
+<section id="playView">
+<div class="game-top"><div><div class="eyebrow">BACKUP ARCADE / NOW PLAYING</div><h2 id="gameTitle">Snow Rider 3D</h2></div><div style="display:flex;gap:8px"><button class="secondary" id="restartBtn">↻ RESTART</button><button class="ghost" id="fullBtn">⛶ FULLSCREEN</button><button class="ghost" id="backBtn">← BACK</button></div></div>
+<div class="stage" id="stage"><canvas id="gameCanvas"></canvas><div class="hud"><div class="hud-box"><small id="scoreLabel">DISTANCE</small><span id="score">0 m</span></div><div class="hud-box"><small>BEST</small><span id="best">0</span></div><div class="hud-box"><small>STATUS</small><span id="status">READY</span></div></div><div class="game-message" id="overlay"><h2 id="overlayTitle">Ready to ride?</h2><p id="overlayText">Press start, then steer with A/D or ←/→.</p><button id="startBtn">START GAME</button></div></div>
+<div class="controls"><div class="control-pills"><span>← → / A D : STEER</span><span>SPACE / ↑ : JUMP or BOOST</span><span>R : RESTART</span></div><span id="gameHint">Avoid trees, rocks, and snowmen. Grab the ramps!</span></div>
 </section>
-</main>
-<footer>KRUG PRODUCTIONS BACKUP • 6.0 • Original browser game project</footer>
-
-<!-- Three.js 3D engine -->
-<script type="importmap">
-{
- "imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
- }
+<section id="multiplayer">
+<div class="section-head"><div><h2>Play with a friend 🌐</h2><p>Create a room and share its code, or join a friend's room.</p></div></div>
+<div class="multi-panel"><div><h3 style="margin:0">Peer-to-peer room</h3><p>One player hosts and shares the room code. The other player enters it to connect. This demo shares player presence and position; both players still run their own game locally.</p><div class="status" id="mpStatus">Not connected.</div></div><div class="multi-actions"><button id="hostBtn">CREATE ROOM</button><input id="roomInput" placeholder="Enter room code" maxlength="40"><button class="secondary" id="joinBtn">JOIN ROOM</button><button class="ghost" id="copyRoomBtn">COPY CODE</button></div></div>
+<div class="notice">Multiplayer is powered by PeerJS's public signaling service. It may be unavailable on restricted networks, and this demo does not include matchmaking, chat moderation, or a dedicated game server. Only share room codes with people you know.</div>
+</section>
+</main><footer>BACKUP 3D ARCADE · ORIGINAL MINI-GAMES · BUILT FOR THE BROWSER</footer>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let current='snow',renderer,scene,camera,clock,raf=0,running=false,ended=false,score=0,best={},player,remote,world=[],keys={},velocity=0,lateral=0,jumpY=0,jumpV=0,spawnTimer=0,peer=null,conn=null,roomCode='',isHost=false,otherState=null;
+const configs={
+ snow:{title:'Snow Rider 3D',label:'DISTANCE',hint:'Avoid trees, rocks, and snowmen. Grab the ramps!',speed:22},
+ drift:{title:'Neon Drift 3D',label:'LAPS',hint:'Steer around the neon track and avoid the barriers.',speed:19},
+ sky:{title:'Skyline Runner',label:'DISTANCE',hint:'Jump across the gaps and stay on the platforms.',speed:17},
+ orbit:{title:'Orbit Breaker',label:'ENERGY',hint:'Collect energy orbs and dodge asteroids.',speed:20},
+ boulder:{title:'Boulder Run',label:'DISTANCE',hint:'Dodge boulders and canyon obstacles.',speed:21},
+ wave:{title:'Wave Racer',label:'DISTANCE',hint:'Steer around buoys and keep your speed up.',speed:23}
+};
+function setView(which){$('homeView').style.display=which==='home'?'block':'none';$('playView').style.display=which==='play'?'block':'none';$('multiplayer').style.display=which==='multi'?'block':'none';$('homeTab').classList.toggle('active',which==='home');$('multiTab').classList.toggle('active',which==='multi')}
+$('homeTab').onclick=()=>{stopGame();setView('home')};$('multiTab').onclick=()=>{stopGame();setView('multi')};$('browseGames').onclick=()=>$('gameGrid').scrollIntoView({behavior:'smooth'});$('featuredPlay').onclick=()=>launch('snow');document.querySelectorAll('[data-launch]').forEach(b=>b.onclick=()=>launch(b.dataset.launch));
+function mat(color,rough=.8,metal=0){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal})}
+function box(w,h,d,m,x=0,y=0,z=0){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);scene.add(o);return o}
+function sphere(r,m,x,y,z){let o=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),m);o.position.set(x,y,z);scene.add(o);return o}
+function makeTree(x,z){let g=new THREE.Group();let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13,.2,1.5,8),mat(0x59402f));trunk.position.y=.75;g.add(trunk);for(let i=0;i<3;i++){let c=new THREE.Mesh(new THREE.ConeGeometry(1.05-i*.18,1.8,8),mat(i===0?0x174b43:0x23685b));c.position.y=1.7+i*.7;g.add(c)}g.position.set(x,0,z);scene.add(g);return g}
+function makeRock(x,z){let o=new THREE.Mesh(new THREE.DodecahedronGeometry(.6,0),mat(0x68798b));o.position.set(x,.35,z);o.scale.set(1,.7,1.25);scene.add(o);return o}
+function makeSled(){let g=new THREE.Group();let deck=new THREE.Mesh(new THREE.BoxGeometry(.85,.13,2.1),mat(0x16bde8,.35,.35));deck.position.y=.38;g.add(deck);for(let x of [-.34,.34]){let rail=new THREE.Mesh(new THREE.BoxGeometry(.08,.1,2.3),mat(0xd7f8ff,.3,.5));rail.position.set(x,.24,0);g.add(rail)}let body=new THREE.Mesh(new THREE.CapsuleGeometry(.25,.75,5,10),mat(0xff6b35,.45));body.position.set(0,.95,-.1);g.add(body);let head=sphere(.24,mat(0xffd5b2),0,1.5,-.18);g.add(head);let helmet=sphere(.26,mat(0x183a75,.25,.4),0,1.62,-.18);helmet.scale.y=.55;g.add(helmet);g.position.y=0;scene.add(g);return g}
+function makeCar(){let g=new THREE.Group();let chassis=new THREE.Mesh(new THREE.BoxGeometry(1.45,.48,2.5),mat(0xff4b57,.35,.45));chassis.position.y=.55;g.add(chassis);let cabin=new THREE.Mesh(new THREE.BoxGeometry(1.05,.55,1.15),mat(0x86d9f5,.2,.45));cabin.position.set(0,1,-.15);g.add(cabin);for(let x of [-.78,.78])for(let z of [-.8,.8]){let w=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.18,16),mat(0x10131a));w.rotation.z=Math.PI/2;w.position.set(x,.3,z);g.add(w)}scene.add(g);return g}
+function launch(mode){current=mode;setView('play');$('gameTitle').textContent=configs[mode].title;$('scoreLabel').textContent=configs[mode].label;$('gameHint').textContent=configs[mode].hint;$('overlay').style.display='block';$('overlayTitle').textContent='Ready?';$('overlayText').textContent='Press start to begin. Use A/D or the arrow keys to steer.';$('startBtn').textContent='START GAME';initGame()}
+function initGame(){
+ stopGame();const canvas=$('gameCanvas');renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;scene=new THREE.Scene();
+ let bg=current==='snow'?0x9bd8f5:current==='orbit'?0x070b24:current==='wave'?0x087caa:current==='sky'?0x83c9ee:0x11172c;scene.background=new THREE.Color(bg);scene.fog=new THREE.Fog(bg,28,115);
+ camera=new THREE.PerspectiveCamera(62,1,.1,180);camera.position.set(0,6,11);camera.lookAt(0,1,-7);
+ scene.add(new THREE.HemisphereLight(0xd8efff,0x344257,2));let sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(-7,15,8);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+ world=[];score=0;velocity=0;lateral=0;jumpY=0;jumpV=0;spawnTimer=0;ended=false;otherState=null;
+ let groundMat=mat(current==='snow'?0xe9f5ff:current==='wave'?0x087da8:current==='orbit'?0x141a40:0x34435c);
+ let ground=box(current==='snow'?34:24,.5,150,groundMat,0,-.4,-55);world.push(ground);
+ if(current==='snow'){for(let s of [-1,1]){let slope=box(13,.5,150,mat(0xd6e9f6),s*15,-.8,-55);world.push(slope)}}
+ if(current==='orbit'){for(let i=0;i<90;i++){let star=sphere(.035,mat(0xffffff), (Math.random()-.5)*55,Math.random()*24-5,-Math.random()*130);world.push(star)}}
+ if(current==='wave'){let water=box(40,.25,150,mat(0x087cae,.2,.35),0,-.65,-55);world.push(water)}
+ // distant environment
+ for(let i=0;i<22;i++){let x=(Math.random()-.5)*70,z=-15-Math.random()*120;let m=current==='snow'?mat(0xeff8ff):mat(0x263b61);let peak=new THREE.Mesh(new THREE.ConeGeometry(5+Math.random()*5,10+Math.random()*15,5),m);peak.position.set(x,3,z);scene.add(peak);world.push(peak)}
+ player=current==='drift'?makeCar():makeSled();player.position.set(0,0,2);
+ if(current==='sky'){player.position.y=0;player.scale.set(.75,1.2,.75)}
+ if(remote){scene.remove(remote);remote=null}
+ if(otherState){remote=sphere(.55,mat(0xffd166),otherState.x,1,otherState.z)}
+ populateObstacles();resize();$('score').textContent='0';$('best').textContent=best[current]||0;$('status').textContent='READY';
 }
+function populateObstacles(){for(let i=0;i<28;i++){let z=-12-i*4.5;let x=(Math.random()-.5)*13;let o;if(current==='snow')o=Math.random()<.68?makeTree(x,z):makeRock(x,z);else if(current==='orbit')o=sphere(.55+Math.random()*.6,mat(0x777b9e,.8,.3),x,Math.random()*3,z);else if(current==='wave'){o=sphere(.45,mat(0xffd15c,.3),x,.1,z);o.scale.y=.6}else if(current==='sky'){o=box(2.2,.35,2.2,mat(0x667dff),x,-.1,z)}else if(current==='drift'){o=box(1.2,1.4,.8,mat(0xffa43a),x,.65,z)}else{o=sphere(.9,mat(0x6d6672),x,.7,z)}world.push(o);o.userData.obstacle=true}}
+function resize(){if(!renderer)return;let r=$('stage').getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix()}
+window.addEventListener('resize',resize);
+function start(){if(!renderer)initGame();running=true;ended=false;score=0;velocity=configs[current].speed;$('overlay').style.display='none';$('status').textContent='LIVE';clock=new THREE.Clock();cancelAnimationFrame(raf);loop()}
+function stopGame(){running=false;cancelAnimationFrame(raf);if(renderer){renderer.dispose();renderer=null}}
+function finish(){running=false;ended=true;best[current]=Math.max(best[current]||0,Math.floor(score));$('best').textContent=best[current];$('status').textContent='CRASHED';$('overlay').style.display='block';$('overlayTitle').textContent='Run complete!';$('overlayText').textContent=`You made it ${Math.floor(score)} ${current==='drift'?'points':'meters'}. Try again and beat your best.`;$('startBtn').textContent='PLAY AGAIN'}
+function loop(){if(!running)return;raf=requestAnimationFrame(loop);let dt=Math.min(clock.getDelta(),.04);score+=dt*(current==='drift'?1:velocity*.32);$('score').textContent=current==='drift'?Math.floor(score)+' pts':Math.floor(score)+' m';
+ let steer=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||keys.d?1:0);lateral+=steer*dt*12;lateral*=Math.pow(.88,dt*60);lateral=Math.max(-6.5,Math.min(6.5,lateral));
+ if((keys.ArrowUp||keys[' '])&&jumpY<=.02)jumpV=current==='snow'?8:7;
+ if(keys.ArrowDown)velocity=Math.max(9,velocity-dt*12);else velocity=Math.min(configs[current].speed+8,velocity+dt*2);
+ jumpV-=22*dt;jumpY=Math.max(0,jumpY+jumpV*dt);if(jumpY===0)jumpV=0;
+ player.position.x=lateral;player.position.y=jumpY;player.rotation.z=-steer*.13;player.rotation.x=Math.sin(score*.06)*.025;
+ camera.position.x+=(lateral*.25-camera.position.x)*dt*2;camera.position.y+=(6+jumpY*.15-camera.position.y)*dt*2;camera.lookAt(lateral*.12,1.1,-8);
+ for(let o of world){if(o.userData.obstacle){o.position.z+=velocity*dt;if(o.position.z>8){o.position.z=-115-Math.random()*20;o.position.x=(Math.random()-.5)*13}
+ let dx=Math.abs(o.position.x-lateral),dz=Math.abs(o.position.z-2);let hitRadius=current==='snow'?1.0:1.0;if(dx<hitRadius&&dz<1.25&&jumpY<1.0){finish();break}}
+ else if(o.position.z<20&&o.position.z>-130)o.position.z+=velocity*dt*.08}
+ if(remote&&otherState){remote.position.x+=(otherState.x-remote.position.x)*.15;remote.position.z=2;remote.position.y=otherState.y+1}
+ if(conn&&conn.open&&Math.random()<.15)conn.send({x:lateral,y:jumpY,game:current});
+ renderer.render(scene,camera)}
+$('startBtn').onclick=start;$('restartBtn').onclick=()=>{initGame();start()};$('backBtn').onclick=()=>{stopGame();setView('home')};$('fullBtn').onclick=()=>{let el=$('stage');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()};
+window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))e.preventDefault();keys[e.key]=true;if(e.key.toLowerCase()==='r'&&$('playView').style.display!=='none'){$('restartBtn').click()}});
+window.addEventListener('keyup',e=>keys[e.key]=false);
+function art(canvas,color1,color2,kind){let c=canvas.getContext('2d'),w=canvas.width=canvas.clientWidth*2,h=canvas.height=canvas.clientHeight*2;c.scale(2,2);let W=canvas.clientWidth,H=canvas.clientHeight;let g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,color1);g.addColorStop(1,color2);c.fillStyle=g;c.fillRect(0,0,W,H);for(let i=0;i<7;i++){c.fillStyle=`rgba(255,255,255,${.05+i*.012})`;c.beginPath();c.moveTo(i*W/6,H);c.lineTo(i*W/6+W*.13,H*.3+Math.random()*35);c.lineTo(i*W/6+W*.3,H);c.fill()}if(kind==='snow'){c.fillStyle='#e9f8ff';c.beginPath();c.moveTo(W*.22,H);c.lineTo(W*.5,H*.08);c.lineTo(W*.8,H);c.fill();c.fillStyle='#20a9df';c.fillRect(W*.47,H*.58,7,34)}else if(kind==='car'){c.fillStyle='#151d35';c.fillRect(W*.35,H*.48,W*.3,H*.52);c.fillStyle='#ff5968';c.fillRect(W*.42,H*.58,W*.17,13)}else{for(let i=0;i<6;i++){c.fillStyle=kind==='space'?'#9deaff':'#8caaff';c.fillRect(i*W/5,H*.55+(i%2)*14,24,8)}c.fillStyle='#fff';c.beginPath();c.arc(W*.7,H*.25,10,0,7);c.fill()}}
+function drawArts(){art($('artSnow'),'#73c9f4','#173d70','snow');art($('artDrift'),'#a02e64','#11162e','car');art($('artSky'),'#54a7cc','#1b356b','sky');art($('artOrbit'),'#233c89','#090c27','space');art($('artBoulder'),'#8a6345','#251b24','sky');art($('artWave'),'#2bc6d4','#07527c','space')}
+drawArts();window.addEventListener('resize',drawArts);
+$('hostBtn').onclick=()=>{cleanupPeer();if(!window.Peer){$('mpStatus').textContent='Multiplayer library did not load. Check your internet connection.';return}peer=new Peer();peer.on('open',id=>{roomCode=id;isHost=true;$('roomInput').value=id;$('mpStatus').textContent='Room created! Share this code with your friend: '+id});peer.on('connection',c=>{conn=c;wireConnection(c)});peer.on('error',e=>$('mpStatus').textContent='Connection issue: '+e.type)};
+$('joinBtn').onclick=()=>{cleanupPeer();let id=$('roomInput').value.trim();if(!id){$('mpStatus').textContent='Enter your friend’s room code first.';return}if(!window.Peer){$('mpStatus').textContent='Multiplayer library did not load. Check your internet connection.';return}peer=new Peer();peer.on('open',()=>{conn=peer.connect(id);wireConnection(conn)});peer.on('error',e=>$('mpStatus').textContent='Could not join: '+e.type)};
+function wireConnection(c){c.on('open',()=>{$('mpStatus').textContent='Connected! You and your friend are in the same room.'});c.on('data',data=>{if(data&&typeof data.x==='number'){otherState=data;if(renderer&&!remote)remote=sphere(.55,mat(0xffd166),data.x,1,2)}});c.on('close',()=>{$('mpStatus').textContent='Friend disconnected.';otherState=null});c.on('error',()=>{$('mpStatus').textContent='Connection interrupted.'})}
+function cleanupPeer(){if(conn){conn.close();conn=null}if(peer){peer.destroy();peer=null}roomCode='';otherState=null}
+$('copyRoomBtn').onclick=async()=>{let code=$('roomInput').value.trim();if(!code){$('mpStatus').textContent='Create a room first, then copy its code.';return}try{await navigator.clipboard.writeText(code);$('mpStatus').textContent='Room code copied! Send it to your friend.'}catch(e){$('mpStatus').textContent='Select and copy the room code from the box.'}};
+window.addEventListener('beforeunload',cleanupPeer);
+setView('home');
+})();
 </script>
-<!-- PeerJS connection library for online rooms -->
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+</body></html>'''
+(out/"index.html").write_text(html, encoding="utf-8")
+readme = """# BACKUP 3D Arcade
 
-<script type="module">
-import * as THREE from "three";
+## Publish it on GitHub Pages
+1. Create a GitHub repository named `backup-arcade` (or another name you like).
+2. Upload `index.html` from this folder to the repository's main/root folder.
+3. Open **Settings → Pages**.
+4. Under **Build and deployment**, choose **Deploy from a branch**.
+5. Choose the `main` branch and `/ (root)`, then Save.
+6. Wait a minute or two. GitHub will show the public website address on the Pages settings screen.
 
-const games=[
- {id:"snow",name:"Snow Rider X",icon:"🏂",desc:"Downhill snowboarding with trees, rocks, jumps, and snowy mountains."},
- {id:"city",name:"Neon Street Racer",icon:"🏎️",desc:"Drive a sports car through a glowing city course."},
- {id:"mountain",name:"Mountain Offroad",icon:"🚙",desc:"Take a 4x4 across a rugged mountain trail."},
- {id:"desert",name:"Desert Rally",icon:"🏜️",desc:"Race across a wide desert landscape."}
-];
+## Included
+- Six original browser mini-games / modes in a 3D Three.js scene.
+- Featured Snow Rider-style downhill game, plus drift, parkour, space, canyon, and water modes.
+- Keyboard controls, score/best score for the current page session, restart, and fullscreen.
+- PeerJS room-code connection demo for sharing player position with a friend.
 
-const gameGrid=document.getElementById("games");
-function renderGames(){
- const q=document.getElementById("search").value.toLowerCase();
- gameGrid.innerHTML=games.filter(g=>(g.name+" "+g.desc).toLowerCase().includes(q)).map(g=>
- `<article class="card" onclick="openGame('${g.id}')">
- <div class="cover">${g.icon}</div><div class="info"><h3>${g.name}</h3><p>${g.desc}</p></div></article>`
- ).join("");
-}
-renderGames();
-
-const canvas=document.getElementById("gameCanvas");
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x9ac9e8);
-scene.fog=new THREE.Fog(0x9ac9e8,45,190);
-
-const camera=new THREE.PerspectiveCamera(65,1100/620,.1,500);
-camera.position.set(0,8,15);
-
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(1100,620,false);
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.15;
-
-scene.add(new THREE.HemisphereLight(0xd9efff,0x66717e,2));
-const sun=new THREE.DirectionalLight(0xfff5df,2.5);
-sun.position.set(-25,45,20);
-sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048);
-sun.shadow.camera.left=-45;sun.shadow.camera.right=45;
-sun.shadow.camera.top=60;sun.shadow.camera.bottom=-60;
-scene.add(sun);
-
-const mat=(color,rough=.8,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
-const snowMat=mat(0xeaf5ff,.95),iceMat=mat(0xb8d9e9,.3),treeMat=mat(0x60452e),leafMat=mat(0x244e3d),rockMat=mat(0x657783),darkMat=mat(0x18232c),redMat=mat(0xd83d4e,.35),blueMat=mat(0x248dcb,.35),blackMat=mat(0x111923,.6),glassMat=new THREE.MeshStandardMaterial({color:0x8cddf4,metalness:.3,roughness:.15,transparent:true,opacity:.75});
-
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(500,500),snowMat);
-ground.rotation.x=-Math.PI/2;ground.position.y=-.4;ground.position.z=-100;
-ground.receiveShadow=true;scene.add(ground);
-
-let track;
-function makeTrack(){
- if(track)scene.remove(track);
- const color=activeMode==="desert"?0xb88956:activeMode==="city"?0x353b46:activeMode==="mountain"?0x8fa5ad:0xd9e9f3;
- track=new THREE.Mesh(new THREE.PlaneGeometry(17,450),mat(color,.95));
- track.rotation.x=-Math.PI/2;track.position.set(0,-.25,-170);track.receiveShadow=true;scene.add(track);
-}
-let activeMode="snow",player,remotePlayer;
-let objects=[],scenery=[],particles=[];
-let running=false,paused=false,ended=false;
-let score=0,distance=0,best=0,speed=.45;
-let vx=0,vy=0,jumping=false,groundY=0;
-let keys={},lastTime=0,roomPeer=null,roomConnection=null,peerRole="";
-let remoteState=null,networkTimer=0;
-let playerX=0,worldZ=0;
-
-function makePlayer(){
- if(player)scene.remove(player);
- player=new THREE.Group();
- if(activeMode==="snow"){
-  const board=new THREE.Mesh(new THREE.BoxGeometry(.65,.12,2.4),mat(0x172a43,.3,.25));
-  board.position.y=.05;board.castShadow=true;player.add(board);
-  const boots=new THREE.Mesh(new THREE.BoxGeometry(.65,.22,.5),blackMat);
-  boots.position.set(0,.24,0);player.add(boots);
-  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.85,5,10),blueMat);
-  body.position.y=.95;body.castShadow=true;player.add(body);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,20,16),mat(0xf0c69c));
-  head.position.y=1.65;head.castShadow=true;player.add(head);
-  const helmet=new THREE.Mesh(new THREE.SphereGeometry(.28,20,12,0,Math.PI*2,0,Math.PI/2),redMat);
-  helmet.position.y=1.75;player.add(helmet);
-  const arms=new THREE.Mesh(new THREE.BoxGeometry(1.05,.16,.18),blueMat);
-  arms.position.y=1.12;arms.rotation.z=-.1;player.add(arms);
- }else{
-  const body=new THREE.Mesh(new THREE.BoxGeometry(1.65,.65,3),activeMode==="city"?redMat:activeMode==="desert"?mat(0xd4a34f,.35):mat(0x477b56,.5));
-  body.position.y=.75;body.castShadow=true;player.add(body);
-  const cabin=new THREE.Mesh(new THREE.BoxGeometry(1.15,.55,1.25),glassMat);
-  cabin.position.set(0,1.25,-.15);player.add(cabin);
-  for(let x of [-.9,.9])for(let z of [-.9,.9]){
-   const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.2,20),blackMat);
-   wheel.rotation.z=Math.PI/2;wheel.position.set(x,.4,z);player.add(wheel);
-  }
- }
- player.position.set(0,0,5);scene.add(player);
-}
-
-function makeTree(x,z,scale=1){
- const g=new THREE.Group();
- const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18*scale,.27*scale,2.1*scale,8),treeMat);
- trunk.position.y=1.05*scale;trunk.castShadow=true;g.add(trunk);
- for(let i=0;i<3;i++){
-  const cone=new THREE.Mesh(new THREE.ConeGeometry((1.2-i*.23)*scale,2.0*scale,9),leafMat);
-  cone.position.y=(2.0+i*.9)*scale;cone.castShadow=true;g.add(cone);
- }
- g.position.set(x,0,z);scene.add(g);return g;
-}
-function makeRock(x,z){
- const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.65+Math.random()*.55,1),rockMat);
- rock.position.set(x,.25,z);rock.scale.y=.7;rock.rotation.set(Math.random(),Math.random(),Math.random());rock.castShadow=true;scene.add(rock);return rock;
-}
-function makeSnowman(x,z){
- const g=new THREE.Group();
- const bottom=new THREE.Mesh(new THREE.SphereGeometry(.55,18,14),snowMat);bottom.position.y=.55;g.add(bottom);
- const middle=new THREE.Mesh(new THREE.SphereGeometry(.38,18,14),snowMat);middle.position.y=1.35;g.add(middle);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.28,18,14),snowMat);head.position.y=1.95;g.add(head);
- const hat=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.25,12),darkMat);hat.position.y=2.2;g.add(hat);
- const nose=new THREE.Mesh(new THREE.ConeGeometry(.09,.38,8),mat(0xf28a32));nose.rotation.x=Math.PI/2;nose.position.set(0,1.95,.28);g.add(nose);
- g.position.set(x,0,z);scene.add(g);return g;
-}
-function makeRamp(x,z){
- const r=new THREE.Mesh(new THREE.BoxGeometry(3,.35,4),mat(0x9ec9df,.6));
- r.position.set(x,.35,z);r.rotation.x=-.16;r.castShadow=true;scene.add(r);return r;
-}
-function clearWorld(){
- for(const o of [...objects,...scenery])scene.remove(o);
- objects=[];scenery=[];
-}
-function buildWorld(){
- clearWorld();
- makeTrack();
- for(let i=0;i<35;i++){
-  const z=-i*10-15;
-  if(activeMode==="snow"||activeMode==="mountain"){
-   for(let side of [-1,1]){
-    let x=side*(10+Math.random()*13);
-    scenery.push(makeTree(x,z+Math.random()*5,.7+Math.random()*.8));
-   }
-  }
- }
- for(let i=0;i<24;i++){
-  const z=-25-i*13-Math.random()*8;
-  const lane=(Math.random()*3-1)*4.4;
-  const roll=Math.random();
-  let obj;
-  if(activeMode==="snow"){
-   if(roll<.55)obj=makeTree(lane,z,.8+Math.random()*.5);
-   else if(roll<.9)obj=makeRock(lane,z);
-   else obj=makeRamp(lane,z);
-  }else{
-   if(roll<.65)obj=makeRock(lane,z);
-   else obj=makeRamp(lane,z);
-  }
-  objects.push({mesh:obj,type:obj.geometry?.type==="BoxGeometry"?"ramp":"obstacle",hit:false});
- }
-}
-function addRemote(){
- if(remotePlayer)scene.remove(remotePlayer);
- remotePlayer=new THREE.Group();
- const board=new THREE.Mesh(new THREE.BoxGeometry(.65,.12,2.4),mat(0xffcf44,.3));
- board.position.y=.05;remotePlayer.add(board);
- const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.85,5,10),mat(0xe85b70));
- body.position.y=.95;remotePlayer.add(body);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.25,16,12),mat(0xf0c69c));
- head.position.y=1.65;remotePlayer.add(head);
- remotePlayer.position.set(3,0,5);scene.add(remotePlayer);
-}
-function resetGame(){
- score=0;distance=0;speed=.45;vx=0;vy=0;jumping=false;playerX=0;worldZ=0;
- document.getElementById("score").textContent="0";
- document.getElementById("distance").textContent="0";
- best=Number(localStorage.getItem("krugBest_"+activeMode)||0);
- document.getElementById("best").textContent=best;
- makePlayer();buildWorld();
- camera.position.set(0,8,15);camera.lookAt(0,1,-8);
-}
-function openGame(id){
- activeMode=id;
- const g=games.find(x=>x.id===id);
- document.getElementById("home").style.display="none";
- document.getElementById("gameScreen").style.display="block";
- document.getElementById("gameTitle").textContent=g.name;
- document.getElementById("gameDescription").textContent=g.desc;
- document.getElementById("overlayTitle").textContent=g.name;
- document.getElementById("overlayText").textContent=g.desc+" Avoid obstacles and see how far you can travel.";
- document.getElementById("overlayButton").textContent="▶ START GAME";
- document.getElementById("overlayButton").onclick=startGame;
- document.getElementById("overlay").style.display="flex";
- running=false;paused=false;ended=false;
- resetGame();window.scrollTo(0,0);
-}
-function startGame(){
- resetGame();running=true;paused=false;ended=false;lastTime=0;
- document.getElementById("overlay").style.display="none";
- renderer.setAnimationLoop(animate);
-}
-function retryGame(){startGame()}
-function goHome(){
- running=false;paused=false;renderer.setAnimationLoop(null);
- document.getElementById("gameScreen").style.display="none";
- document.getElementById("home").style.display="block";
-}
-function pauseGame(){
- if(!running&&!paused)return;
- if(running){
-  running=false;paused=true;
-  document.getElementById("overlayTitle").textContent="PAUSED";
-  document.getElementById("overlayText").textContent="Your run is paused.";
-  document.getElementById("overlayButton").textContent="▶ RESUME";
-  document.getElementById("overlayButton").onclick=resumeGame;
-  document.getElementById("overlay").style.display="flex";
- }else resumeGame();
-}
-function resumeGame(){
- paused=false;running=true;lastTime=0;
- document.getElementById("overlay").style.display="none";
-}
-function finishGame(){
- running=false;ended=true;
- renderer.setAnimationLoop(null);
- best=Math.max(best,Math.floor(score));
- localStorage.setItem("krugBest_"+activeMode,best);
- document.getElementById("best").textContent=best;
- document.getElementById("overlayTitle").textContent="RUN OVER!";
- document.getElementById("overlayText").textContent="Distance: "+Math.floor(distance)+" m • Score: "+Math.floor(score);
- document.getElementById("overlayButton").textContent="↻ TRY AGAIN";
- document.getElementById("overlayButton").onclick=startGame;
- document.getElementById("overlay").style.display="flex";
-}
-function animate(time){
- if(!running)return;
- const dt=lastTime?Math.min((time-lastTime)/16.67,2):1;
- lastTime=time;
- update(dt);renderer.render(scene,camera);
-}
-function update(dt){
- const left=keys.ArrowLeft||keys.a||keys.A;
- const right=keys.ArrowRight||keys.d||keys.D;
- if(left)vx-=.018*dt;
- if(right)vx+=.018*dt;
- vx*=Math.pow(.91,dt);
- playerX+=vx*dt;
- playerX=Math.max(-6.2,Math.min(6.2,playerX));
- player.position.x=playerX;
- player.rotation.z=-vx*.12;
- if(activeMode==="snow"){
-  if((keys[" "]||keys.ArrowUp||keys.w)&&!jumping){vy=.25;jumping=true}
-  if(jumping){vy-=.014*dt;player.position.y+=vy*dt;if(player.position.y<=0){player.position.y=0;vy=0;jumping=false}}
- }else{
-  if(keys.ArrowUp||keys.w)distance+=speed*dt*1.5;
-  if(keys.ArrowDown||keys.s)distance+=speed*dt*.4;
- }
- const accel=activeMode==="snow"?.0015:.001;
- speed=Math.min(1.15,speed+accel*dt);
- distance+=speed*dt*1.8;
- score+=speed*dt*1.2;
- const advance=speed*dt*1.8;
- for(const item of objects){
-  item.mesh.position.z+=advance;
-  if(item.mesh.position.z>12){
-   item.mesh.position.z=-300-Math.random()*80;
-   item.mesh.position.x=(Math.random()*2-1)*5;
-   item.hit=false;
-  }
-  if(item.type==="ramp"&&Math.abs(item.mesh.position.z-5)<1.4&&Math.abs(item.mesh.position.x-playerX)<2.1&&!item.hit){
-   item.hit=true;vy=.35;jumping=true;player.position.y+=.25;
-   score+=30;
-  }
-  if(item.type==="obstacle"&&Math.abs(item.mesh.position.z-5)<1.3&&Math.abs(item.mesh.position.x-playerX)<1.45&&!jumping&&!item.hit){
-   item.hit=true;finishGame();return;
-  }
- }
- for(const tree of scenery){
-  tree.position.z+=advance;
-  if(tree.position.z>15)tree.position.z=-350-Math.random()*100;
- }
- // Snowy mountains in the far background
- camera.position.x+=(playerX*.35-camera.position.x)*.035;
- camera.position.y+=(8+player.position.y*.3-camera.position.y)*.035;
- camera.lookAt(playerX*.25,1.2,-10);
- player.position.z=5;
- if(remotePlayer&&remoteState){
-  remotePlayer.position.x+=(remoteState.x-remotePlayer.position.x)*.2;
-  remotePlayer.position.y+=(remoteState.y-remotePlayer.position.y)*.2;
-  remotePlayer.position.z=5;
- }
- networkTimer+=dt;
- if(networkTimer>5){networkTimer=0;sendState()}
- document.getElementById("score").textContent=Math.floor(score);
- document.getElementById("distance").textContent=Math.floor(distance);
- if(Math.floor(score)>best)document.getElementById("best").textContent=Math.floor(score);
-}
-function fullScreen(){
- const el=document.querySelector(".stage");
- if(!document.fullscreenElement)el.requestFullscreen?.();
- else document.exitFullscreen?.();
-}
-function press(k){keys[k]=true}
-function release(k){keys[k]=false}
-window.addEventListener("keydown",e=>{
- if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," "].includes(e.key))e.preventDefault();
- keys[e.key]=true;
- if(e.key.toLowerCase()==="p")pauseGame();
-});
-window.addEventListener("keyup",e=>keys[e.key]=false);
-window.addEventListener("blur",()=>keys={});
-window.addEventListener("resize",()=>{
- const w=canvas.clientWidth||1100;
- const h=w*620/1100;
- renderer.setSize(w,h,false);
- camera.aspect=1100/620;camera.updateProjectionMatrix();
-});
-canvas.addEventListener("pointermove",e=>{
- if(!running)return;
- const r=canvas.getBoundingClientRect();
- const x=(e.clientX-r.left)/r.width;
- playerX=(x-.5)*12.4;
-});
-canvas.addEventListener("pointerdown",()=>{if(activeMode==="snow"&&!jumping){keys[" "]=true;setTimeout(()=>keys[" "]=false,120)}});
-
-/* Multiplayer: host creates a room code; guest connects using that code. */
-function setRoomStatus(message){document.getElementById("roomStatus").textContent=message}
-function closeRoom(){
- if(roomConnection){roomConnection.close();roomConnection=null}
- if(roomPeer){roomPeer.destroy();roomPeer=null}
- remoteState=null;
- if(remotePlayer){scene.remove(remotePlayer);remotePlayer=null}
-}
-function createRoom(){
- closeRoom();
- if(!window.Peer){setRoomStatus("Multiplayer connection library did not load. Solo play is still available.");return}
- setRoomStatus("Creating room...");
- roomPeer=new Peer();
- roomRole="host";
- roomPeer.on("open",id=>{
-  document.getElementById("roomCode").value=id;
-  setRoomStatus("Room created! Share this code with your friend: "+id);
- });
- roomPeer.on("connection",conn=>{
-  roomConnection=conn;
-  setupConnection(conn);
- });
- roomPeer.on("error",err=>setRoomStatus("Connection error: "+err.type+". You can still play solo."));
-}
-function joinRoom(){
- const id=document.getElementById("roomCode").value.trim();
- if(!id){setRoomStatus("Enter your friend's room code first.");return}
- closeRoom();
- if(!window.Peer){setRoomStatus("Multiplayer connection library did not load. Solo play is still available.");return}
- setRoomStatus("Connecting to room...");
- roomPeer=new Peer();
- roomRole="guest";
- roomPeer.on("open",()=>{
-  roomConnection=roomPeer.connect(id,{reliable:true});
-  setupConnection(roomConnection);
- });
- roomPeer.on("error",err=>setRoomStatus("Could not connect: "+err.type+". Check the code and try again."));
-}
-function setupConnection(conn){
- roomConnection=conn;
- conn.on("open",()=>{
-  setRoomStatus("🟢 Connected! You are in the multiplayer room.");
-  addRemote();
- });
- conn.on("data",data=>{
-  if(data&&data.kind==="position")remoteState=data;
- });
- conn.on("close",()=>setRoomStatus("Your friend disconnected."));
- conn.on("error",()=>setRoomStatus("Multiplayer connection interrupted."));
-}
-function sendState(){
- if(roomConnection&&roomConnection.open&&player){
-  roomConnection.send({kind:"position",x:player.position.x,y:player.position.y});
- }
-}
-window.openGame=openGame;
-window.startGame=startGame;
-window.retryGame=retryGame;
-window.pauseGame=pauseGame;
-window.goHome=goHome;
-window.fullScreen=fullScreen;
-window.press=press;
-window.release=release;
-window.createRoom=createRoom;
-window.joinRoom=joinRoom;
-</script>
-</body>
-</html>
+## Notes
+- This is an original project, not a copy of Classroom 6x or any third-party game's source code.
+- Three.js and PeerJS load from public CDNs, so an internet connection is required.
+- Multiplayer is a lightweight peer-to-peer demo, not a dedicated authoritative game server. A school/network content filter may still block the page or the multiplayer connection.
+- Use the site on a network where gaming is allowed. This project does not bypass school or device restrictions.
+"""
+(out/"README.txt").write_text(readme, encoding="utf-8")
+zip_path=Path("/mnt/data/BACKUP_3D_Arcade.zip")
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    z.write(out/"index.html","BACKUP_3D_Arcade/index.html")
+    z.write(out/"README.txt","BACKUP_3D_Arcade/README.txt")
+print("Created:", zip_path, "and", out/"index.html")
